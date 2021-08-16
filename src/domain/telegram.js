@@ -18,9 +18,9 @@ async function initTelegram() {
 
   airgram.use(
     new Auth({
-      code: () => prompt("Please enter the secret code:\n"),
-      phoneNumber: () => prompt("Please enter your phone number:\n"),
-      password: () => prompt("Please enter your password:\n"),
+      code: () => prompt("Please enter the secret code:"),
+      phoneNumber: () => prompt("Please enter your phone number:"),
+      password: () => prompt("Please enter your password:"),
     })
   );
 }
