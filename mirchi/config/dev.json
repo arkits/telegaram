@@ -1,0 +1,10 @@
+{
+  "telegram": {
+    "tdlib": {
+      "api_id": "554182",
+      "api_hash": "442c814c1ca14f8cd597db53f14453b5",
+      "tdlib_path": "/Users/archit/Dev/tdlib-sandbox/python-client/tdlib/lib/libtdjson.dylib",
+      "log_level": 0
+    }
+  }
+}

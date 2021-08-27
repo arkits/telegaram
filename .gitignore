@@ -104,3 +104,4 @@ dist
 .tern-port
 config/dev.json
 db/td.binlog
+.DS_Store
