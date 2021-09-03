@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import { getChats } from '../../../../api/fetches';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,33 +22,71 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function GroupList() {
-  const classes = useStyles();
+function RenderChatsList(chats) {
+  if (!chats) {
+    return null;
+  }
 
+  if (chats.length === 0) {
+    return null;
+  }
+  return chats.map((chat) => {
+    <h1>here</h1>;
+  });
+}
+
+function ChatListing({ chat }) {
+  const classes = useStyles();
   return (
-    <List className={classes.root}>
+    <>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <Avatar alt={chat.title} src="/" />
         </ListItemAvatar>
         <ListItemText
-          primary="Brunch this weekend?"
+          primary={chat.title}
           secondary={
-            <React.Fragment>
+            <>
               <Typography
                 component="span"
                 variant="body2"
                 className={classes.inline}
                 color="textPrimary"
               >
-                Ali Connors
+                Sender:
               </Typography>
-              {" — I'll be in your neighborhood doing errands this…"}
-            </React.Fragment>
+              {' This is a new message'}
+            </>
           }
         />
       </ListItem>
       <Divider variant="inset" component="li" />
+    </>
+  );
+}
+
+function GroupList() {
+  const classes = useStyles();
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+    getChats()
+      .then((res) => res.json())
+      .then((resJson) => {
+        setChats(resJson);
+      })
+      .catch((err) => {
+        console.error('Caught Error', err);
+      });
+  }, []);
+
+  return (
+    <List className={classes.root}>
+      {chats.map(function (chat, idx) {
+        return <ChatListing key={idx} chat={chat} />;
+      })}
     </List>
   );
 }
+
+export default GroupList;

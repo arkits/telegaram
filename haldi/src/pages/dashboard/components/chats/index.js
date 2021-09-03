@@ -8,7 +8,7 @@ function Chats() {
         <Grid item xs={3}>
           <GroupList />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={9} style={{ paddingLeft: '20px' }}>
           <h1>Chat messages will be here</h1>
         </Grid>
       </Grid>

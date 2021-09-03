@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ initTelegram();
 const SERVER_PORT = process.env.SERVER_PORT;
 
 const app = express();
+
+app.use(cors());
 
 app.use('/api', apiRouter);
 
