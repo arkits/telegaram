@@ -22,19 +22,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function RenderChatsList(chats) {
-  if (!chats) {
-    return null;
-  }
-
-  if (chats.length === 0) {
-    return null;
-  }
-  return chats.map((chat) => {
-    <h1>here</h1>;
-  });
-}
-
 function ChatListing({ chat }) {
   const classes = useStyles();
   return (
