@@ -19,14 +19,16 @@
   },
   "homepage": "https://github.com/arkits/telegaram#readme",
   "dependencies": {
+    "@prisma/client": "^2.30.3",
     "airgram": "^4.0.0",
-    "config": "^3.3.6",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "log4js": "^6.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.12",
-    "pkg": "^5.3.1"
+    "pkg": "^5.3.1",
+    "prisma": "^2.30.3"
   },
   "pkg": {
     "outputPath": "dist",
