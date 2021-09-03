@@ -5,7 +5,12 @@ const prisma = new PrismaClient();
 logger.debug('Creating prisma client');
 
 async function getChats() {
-  const chats = await prisma.chat.findMany();
+  const chats = await prisma.chat.findMany({
+    orderBy: {
+      timeLastActive: 'desc'
+    },
+    take: 50
+  });
   return chats;
 }
 
@@ -39,7 +44,9 @@ async function handleUpdateNewMessage(update) {
       id: update.message.chatId,
       timeLastActive: new Date()
     },
-    update: {}
+    update: {
+      timeLastActive: new Date()
+    }
   });
 
   // Persist the Sender

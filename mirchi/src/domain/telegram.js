@@ -25,7 +25,7 @@ async function initTelegram() {
   );
 
   airgram.on('updateNewChat', async (ctx, next) => {
-    logger.debug('[update] updateNewChat chat.id=%s', ctx.update.chat.id, ctx.update);
+    logger.debug('[update] updateNewChat chat.id=%s', ctx.update.chat.id);
     try {
       await handleUpdateNewChat(ctx.update);
     } catch (error) {
@@ -35,7 +35,7 @@ async function initTelegram() {
   });
 
   airgram.on('updateNewMessage', async (ctx, next) => {
-    logger.debug('[update] updateNewMessage update=', ctx.update);
+    logger.debug('[update] updateNewMessage sender=%s', ctx.update.message.sender.userId);
     try {
       await handleUpdateNewMessage(ctx.update);
     } catch (error) {

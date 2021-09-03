@@ -15,14 +15,14 @@ model Message {
   createdAt   DateTime @default(now()) @db.Timestamp(6)
   content     Json     @db.Json
   author      User     @relation(fields: [authorId], references: [id])
-  authorId    Int
-  messageId   Int
+  authorId    BigInt
+  messageId   BigInt
   chat        Chat     @relation(fields: [chatId], references: [id])
-  chatId      Int
+  chatId      BigInt
 }
 
 model Chat {
-  id             Int       @id @unique
+  id             BigInt       @id @unique
   title          String?
   type           String?
   Message        Message[]
@@ -30,7 +30,7 @@ model Chat {
 }
 
 model User {
-  id       Int       @id @unique
+  id       BigInt       @id @unique
   username String?   @db.VarChar(255)
   messages Message[]
 }

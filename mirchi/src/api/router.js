@@ -1,5 +1,6 @@
 const express = require('express');
 const logger = require('../domain/logger');
+const { serializeJson } = require('../domain/utils');
 
 // const { getMe, getChats } = require("../domain/telegram");
 const { getChats } = require('../domain/db');
@@ -41,7 +42,7 @@ router.get("/tg/chats", async function (req, res) {
 router.get('/chats', async function (req, res) {
   try {
     let chats = await getChats();
-    res.json(chats);
+    res.json(serializeJson(chats));
   } catch (err) {
     logger.error('Caught Error -', err);
     res.status(400);
