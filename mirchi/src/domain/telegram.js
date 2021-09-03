@@ -35,7 +35,11 @@ async function initTelegram() {
   });
 
   airgram.on('updateNewMessage', async (ctx, next) => {
-    logger.debug('[update] updateNewMessage sender=%s', ctx.update.message.sender.userId);
+    logger.debug(
+      '[update] updateNewMessage sender=%s chat.id=%s',
+      ctx.update.message.sender.userId,
+      ctx.update.message.chatId
+    );
     try {
       await handleUpdateNewMessage(ctx.update);
     } catch (error) {

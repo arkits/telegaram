@@ -71,8 +71,22 @@ async function handleUpdateNewMessage(update) {
   });
 }
 
+async function getMessagesByChat(chatId) {
+  const messages = await prisma.message.findMany({
+    where: {
+      chatId: BigInt(chatId)
+    },
+    take: 50,
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+  return messages;
+}
+
 module.exports = {
   getChats,
   handleUpdateNewMessage,
-  handleUpdateNewChat
+  handleUpdateNewChat,
+  getMessagesByChat
 };
