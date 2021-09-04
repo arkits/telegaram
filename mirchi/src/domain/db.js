@@ -109,7 +109,7 @@ async function handleUpdateUser(update) {
 }
 
 async function handleUpdateSupergroup(update) {
-  const chat = await prisma.chat.upsert({
+  await prisma.chat.upsert({
     where: {
       id: update.supergroup.id
     },
@@ -132,6 +132,25 @@ async function handleUpdate(update) {
     }
   });
 }
+
+/*
+{"_":"updateUserStatus","userId":XXXXX,"status":{"_":"userStatusRecently"}}
+*/
+async function handleUpdateUserStatus(update) {
+  await prisma.user.upsert({
+    where: {
+      id: update.userId
+    },
+    update: {
+      status: update?.status?._
+    },
+    create: {
+      id: update.user.id,
+      status: update?.status?._
+    }
+  });
+}
+
 module.exports = {
   getChats,
   getMessagesByChat,
@@ -139,5 +158,6 @@ module.exports = {
   handleUpdateNewMessage,
   handleUpdateNewChat,
   handleUpdateUser,
-  handleUpdateSupergroup
+  handleUpdateSupergroup,
+  handleUpdateUserStatus
 };

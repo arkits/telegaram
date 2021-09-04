@@ -78,9 +78,9 @@ async function initTelegram() {
   });
 
   airgram.on('updateUserStatus', async (ctx, next) => {
-    logger.debug('[update] updateUserStatus id=%s', ctx.update.user.id);
+    logger.debug('[update] updateUserStatus id=%s', ctx.update.userId);
     try {
-      await handleUpdateUser(ctx.update);
+      await handleUpdateUserStatus(ctx.update);
     } catch (error) {
       logger.error('Caught Error in updateNewMessage middleware -', error);
     }
@@ -88,7 +88,7 @@ async function initTelegram() {
   });
 
   airgram.on('updateSupergroup', async (ctx, next) => {
-    logger.debug('[update] updateSupergroup id=%s', ctx.update.user.id);
+    logger.debug('[update] updateSupergroup id=%s', ctx.update);
     try {
       await handleUpdateSupergroup(ctx.update);
     } catch (error) {
