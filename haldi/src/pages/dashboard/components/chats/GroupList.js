@@ -54,7 +54,7 @@ const GroupList = observer(() => {
   return (
     <List className={classes.root}>
       {Object.values(store.chats)
-        .filter((v) => v?.messages?.length > 1)
+        .filter((v) => v?.messages?.length > 0)
         .sort((a, b) => {
           return new Date(b?.lastMessage?.createdAt) - new Date(a?.lastMessage?.createdAt);
         })

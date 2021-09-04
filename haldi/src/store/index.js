@@ -41,6 +41,9 @@ class Store {
 
   addMessageToChat(message) {
     let chat = this.chats[message.chatId];
+    if (!chat) {
+      return;
+    }
 
     chat['messages'] = [message].concat(chat?.messages);
     chat['lastMessage'] = message;
