@@ -21,8 +21,13 @@ const SioClient = observer(() => {
     });
 
     newSocket.on('chatMessage', (data) => {
-      console.log('[sio] chatMessage', data);
+      //  console.log('[sio] chatMessage', data);
       store.addMessageToChat(data);
+    });
+
+    newSocket.on('userUpdate', (user) => {
+      //  console.log('[sio] userUpdate', user);
+      store.addUser(user);
     });
 
     setSocket(newSocket);

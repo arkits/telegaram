@@ -1,6 +1,6 @@
 const { Server } = require('socket.io');
 
-const { getChats, getMessagesByChat } = require('../domain/db');
+const { getChats, getMessagesByChat, getAllActiveUsers } = require('../domain/db');
 const { serializeJson } = require('../domain/utils');
 const logger = require('../domain/logger');
 
@@ -24,6 +24,11 @@ function createSio(server) {
       chat['messages'] = messages;
       chat['lastMessage'] = messages?.[0];
       io.emit('chatUpdate', serializeJson(chat));
+    });
+
+    const users = await getAllActiveUsers();
+    users.forEach((user) => {
+      io.emit('userUpdate', serializeJson(user));
     });
   });
 }

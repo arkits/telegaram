@@ -32,6 +32,11 @@ async function getMessagesByChat(chatId) {
   return messages;
 }
 
+async function getAllActiveUsers() {
+  const users = await prisma.user.findMany({});
+  return users;
+}
+
 async function handleUpdateNewChat(update) {
   const chat = await prisma.chat.upsert({
     where: {
@@ -68,15 +73,23 @@ async function handleUpdateNewMessage(update) {
   });
 
   // Persist the Sender
-  const sender = await prisma.user.upsert({
-    where: {
-      id: update.message.sender.userId
-    },
-    create: {
-      id: update.message.sender.userId
-    },
-    update: {}
-  });
+  try {
+    const sender = await prisma.user.upsert({
+      where: {
+        id: update.message.sender.userId
+      },
+      create: {
+        id: update.message.sender.userId
+      },
+      update: {}
+    });
+  } catch (error) {
+    logger.error(
+      'Caught Error in handleUpdateNewMessage - Persist the Sender - ',
+      update.message.sender,
+      error
+    );
+  }
 
   // Persist the Message
   const message = await prisma.message.create({
@@ -161,6 +174,7 @@ async function handleUpdateUserStatus(update) {
 module.exports = {
   getChats,
   getMessagesByChat,
+  getAllActiveUsers,
   handleUpdate,
   handleUpdateNewMessage,
   handleUpdateNewChat,

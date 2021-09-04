@@ -9,7 +9,7 @@ log4js.configure({
   categories: {
     default: {
       appenders: ['toFile', 'stdOut'],
-      level: 'debug',
+      level: 'info',
       enableCallStack: true
     }
   }

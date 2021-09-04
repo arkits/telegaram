@@ -5,6 +5,7 @@ class Store {
   chats = {};
   selectedChatIdx = null;
   sioConnected = false;
+  users = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -14,32 +15,35 @@ class Store {
     this.secondsPassed += 1;
   }
 
-  addChat(chat) {
+  _generateSubtitle(chat) {
     let lastMessageText = chat?.lastMessage?.content?.text?.text;
     if (!lastMessageText) {
       lastMessageText = chat?.lastMessage?.content?._;
     }
 
-    let lastMessageAuthor = chat?.lastMessage?.authorId;
+    let lastMessageAuthorId = chat?.lastMessage?.authorId;
+    let prettyLastMessageAuthor = lastMessageAuthorId;
 
-    chat['subtitle'] = `${lastMessageAuthor}: ${lastMessageText?.substring(0, 20)}`;
+    let lastMessageAuthor = this.users[String(lastMessageAuthorId)];
+    if (lastMessageAuthor) {
+      prettyLastMessageAuthor =
+        lastMessageAuthor?.username || lastMessageAuthor?.firstName || lastMessageAuthor?.id;
+    }
 
+    return `${prettyLastMessageAuthor}: ${lastMessageText?.substring(0, 20)}`;
+  }
+
+  addChat(chat) {
+    chat['subtitle'] = this._generateSubtitle(chat);
     this.chats[chat.id] = chat;
   }
 
   addMessageToChat(message) {
     let chat = this.chats[message.chatId];
+
     chat['messages'] = [message].concat(chat?.messages);
     chat['lastMessage'] = message;
-
-    let lastMessageText = message?.content?.text?.text;
-    if (!lastMessageText) {
-      lastMessageText = message?.content?._;
-    }
-
-    let lastMessageAuthor = chat?.lastMessage?.authorId;
-
-    chat['subtitle'] = `${lastMessageAuthor}: ${lastMessageText?.substring(0, 20)}`;
+    chat['subtitle'] = this._generateSubtitle(chat);
 
     this.chats[chat.id] = chat;
   }
@@ -50,6 +54,10 @@ class Store {
 
   setSelectedChatIdx(idx) {
     this.selectedChatIdx = idx;
+  }
+
+  addUser(user) {
+    this.users[String(user.id)] = user;
   }
 }
 
