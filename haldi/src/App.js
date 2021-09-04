@@ -6,7 +6,13 @@ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 function App() {
   const theme = createTheme({
     palette: {
-      type: 'dark'
+      type: 'dark',
+      background: {
+        default: '#121212'
+      }
+    },
+    typography: {
+      fontFamily: ['Barlow'].join(',')
     }
   });
 

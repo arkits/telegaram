@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme) => ({
     height: '100%'
   },
   appBar: {
-    backgroundColor: "#0093E9",
-    backgroundImage: "linear-gradient(160deg, #0093E9 0%, #80D0C7 100%)",    
+    backgroundColor: 'rgb(131,58,180)',
+    backgroundImage: 'linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 100%);',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,

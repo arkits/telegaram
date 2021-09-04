@@ -9,6 +9,11 @@ function getChats() {
   return fetch(`${API_BASE_URL}/api/chats`, DEFAULT_REQUEST_OPTIONS);
 }
 
+function getMessages(chatId) {
+  return fetch(`${API_BASE_URL}/api/messages/${chatId}`, DEFAULT_REQUEST_OPTIONS);
+}
+
 module.exports = {
-  getChats
+  getChats,
+  getMessages
 };
