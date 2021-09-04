@@ -64,7 +64,7 @@ async function initTelegram() {
   });
 
   airgram.on('updateNewChat', async (ctx, next) => {
-    logger.debug('[update] updateNewChat chat.id=%s', ctx.update.chat.id);
+    logger.debug('[update] updateNewChat update=%s', JSON.stringify(ctx.update));
     try {
       await handleUpdateNewChat(ctx.update);
     } catch (error) {
@@ -79,11 +79,7 @@ async function initTelegram() {
   });
 
   airgram.on('updateNewMessage', async (ctx, next) => {
-    logger.debug(
-      '[update] updateNewMessage sender=%s chat.id=%s',
-      ctx.update.message.sender.userId,
-      ctx.update.message.chatId
-    );
+    logger.debug('[update] updateNewMessage update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       const message = await handleUpdateNewMessage(ctx.update);
       getIo().emit('chatMessage', serializeJson(message));
@@ -99,7 +95,7 @@ async function initTelegram() {
   });
 
   airgram.on('updateUser', async (ctx, next) => {
-    logger.debug('[update] updateUser id=%s', ctx.update.user.id);
+    logger.debug('[update] updateUser update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       await handleUpdateUser(ctx.update);
     } catch (error) {
@@ -113,8 +109,9 @@ async function initTelegram() {
     return next();
   });
 
+  // {"_":"updateUserStatus","userId":XXX,"status":{"_":"userStatusOnline","expires":1630794480}}
   airgram.on('updateUserStatus', async (ctx, next) => {
-    logger.debug('[update] updateUserStatus id=%s', ctx.update.userId);
+    logger.debug('[update] updateUserStatus update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       await handleUpdateUserStatus(ctx.update);
     } catch (error) {
