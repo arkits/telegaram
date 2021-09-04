@@ -23,10 +23,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ChatListing({ chat }) {
+function ChatListing({ chat, setSelectedChat }) {
   return (
     <>
-      <ListItem alignItems="flex-start">
+      <ListItem
+        alignItems="flex-start"
+        onClick={() => {
+          setSelectedChat(chat);
+        }}
+      >
         <ListItemAvatar>
           <Avatar alt={chat.title} src="/" />
         </ListItemAvatar>
@@ -37,7 +42,7 @@ function ChatListing({ chat }) {
   );
 }
 
-const GroupList = observer(() => {
+const GroupList = observer(({ setSelectedChat }) => {
   const classes = useStyles();
 
   const store = useContext(StoreContext);
@@ -64,6 +69,7 @@ const GroupList = observer(() => {
 
               let chatToUpdate = chat;
               chatToUpdate['lastMessage'] = lastMessageText;
+              chatToUpdate['messages'] = resJson;
 
               store.addChat(chatToUpdate);
             });
@@ -74,7 +80,7 @@ const GroupList = observer(() => {
   return (
     <List className={classes.root}>
       {Object.values(store.chats).map(function (chat, idx) {
-        return <ChatListing key={idx} chat={chat} />;
+        return <ChatListing key={idx} chat={chat} setSelectedChat={setSelectedChat} />;
       })}
     </List>
   );

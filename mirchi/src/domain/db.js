@@ -145,7 +145,7 @@ async function handleUpdateUserStatus(update) {
       status: update?.status?._
     },
     create: {
-      id: update.user.id,
+      id: update.userId,
       status: update?.status?._
     }
   });
