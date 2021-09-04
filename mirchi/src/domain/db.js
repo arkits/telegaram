@@ -1,7 +1,10 @@
 const { PrismaClient } = require('@prisma/client');
 const logger = require('./logger');
+const { serializeJson } = require('./utils');
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  // log: ['query', 'info', 'warn', 'error']
+});
 logger.debug('Creating prisma client');
 
 async function getChats() {
@@ -38,22 +41,85 @@ async function getAllActiveUsers() {
 }
 
 async function handleUpdateNewChat(update) {
-  const chat = await prisma.chat.upsert({
+  const chat = await prisma.chat.findUnique({
     where: {
-      id: update.chat.id
-    },
-    update: {
-      title: update.chat.title,
-      type: update.chat.type._,
-      timeLastActive: new Date()
-    },
-    create: {
-      id: update.chat.id,
-      title: update.chat.title,
-      type: update.chat.type._,
-      timeLastActive: new Date()
+      id: BigInt(update?.chat?.id)
     }
   });
+  if (update?.chat?.id && chat?.id && BigInt(chat?.id) === BigInt(update?.chat?.id)) {
+    await prisma.chat.update({
+      where: {
+        id: update?.chat?.id
+      },
+      data: {
+        title: update?.chat?.title,
+        type: update?.chat?.type?._,
+        timeLastActive: new Date()
+      }
+    });
+  } else {
+    try {
+      await prisma.chat.create({
+        data: {
+          id: BigInt(update.chat.id),
+          title: update?.chat?.title,
+          type: update?.chat?.type?._,
+          timeLastActive: new Date()
+        }
+      });
+    } catch (error) {
+      logger.error(
+        'Caught Error -  handleUpdateNewChat chat.create error=%s update=%s',
+        error,
+        JSON.stringify(serializeJson(update))
+      );
+    }
+  }
+
+  return;
+}
+
+async function handleUpdateUser(update) {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: BigInt(update?.user?.id)
+    }
+  });
+
+  if (update?.user?.id && user?.id && BigInt(user?.id) === BigInt(update?.user?.id)) {
+    await prisma.user.update({
+      where: {
+        id: update.user.id
+      },
+      data: {
+        username: update?.user?.username,
+        firstName: update?.user?.firstName,
+        lastName: update?.user?.lastName,
+        status: update?.user?.status._,
+        type: update?.user?.type?._
+      }
+    });
+  } else {
+    try {
+      await prisma.user.create({
+        data: {
+          id: BigInt(update.user.id),
+          username: update?.user?.username,
+          firstName: update?.user?.firstName,
+          lastName: update?.user?.lastName,
+          status: update?.user?.status._,
+          type: update?.user?.type?._
+        }
+      });
+    } catch (error) {
+      logger.error(
+        'Caught Error -  handleUpdateUser user.create - error=%s update=%s',
+        error,
+        JSON.stringify(serializeJson(update))
+      );
+    }
+  }
+
   return;
 }
 
@@ -72,15 +138,18 @@ async function handleUpdateNewMessage(update) {
     }
   });
 
+  // A message can be sent from a User or a Chat
+  let senderId = update?.message?.sender?.userId || update?.message?.sender?.chatId;
+
   // Persist the Sender
   try {
-    if (update?.message?.sender?.userId) {
+    if (senderId) {
       await prisma.user.upsert({
         where: {
-          id: update.message.sender.userId
+          id: BigInt(senderId)
         },
         create: {
-          id: update.message.sender.userId
+          id: BigInt(senderId)
         },
         update: {}
       });
@@ -100,36 +169,12 @@ async function handleUpdateNewMessage(update) {
     data: {
       content: update.message.content,
       messageId: update.message.id,
-      authorId: update.message.sender.userId,
+      authorId: BigInt(senderId),
       chatId: update.message.chatId
     }
   });
 
   return message;
-}
-
-async function handleUpdateUser(update) {
-  const user = await prisma.user.upsert({
-    where: {
-      id: update.user.id
-    },
-    update: {
-      username: update?.user?.username,
-      firstName: update?.user?.firstName,
-      lastName: update?.user?.lastName,
-      status: update?.user?.status._,
-      type: update?.user?.type?._
-    },
-    create: {
-      id: update.user.id,
-      username: update?.user?.username,
-      firstName: update?.user?.firstName,
-      lastName: update?.user?.lastName,
-      status: update?.user?.status._,
-      type: update?.user?.type?._
-    }
-  });
-  return;
 }
 
 async function handleUpdateSupergroup(update) {
@@ -141,11 +186,13 @@ async function handleUpdateSupergroup(update) {
       id: BigInt(groupId)
     },
     update: {
-      memberCount: update.supergroup.memberCount
+      memberCount: update?.supergroup?.memberCount,
+      timeLastActive: new Date()
     },
     create: {
       id: BigInt(groupId),
-      memberCount: update.supergroup.memberCoun
+      memberCount: update?.supergroup?.memberCount,
+      timeLastActive: new Date()
     }
   });
 }
@@ -173,11 +220,12 @@ async function handleUpdateSupergroupFullInfo(update) {
 }
 
 async function handleUpdate(update) {
-  logger.debug('persisting update=%s', JSON.stringify(update));
+  logger.debug('Persisting update=%s', JSON.stringify(update));
 
   await prisma.update.create({
     data: {
-      update: JSON.parse(JSON.stringify(update))
+      update: JSON.parse(JSON.stringify(update)),
+      eventType: update?._
     }
   });
 }

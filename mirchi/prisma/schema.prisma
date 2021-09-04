@@ -46,4 +46,5 @@ model Update {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @db.Timestamp(6)
   update    Json     @db.Json
+  eventType String?
 }
