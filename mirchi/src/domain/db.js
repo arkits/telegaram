@@ -59,7 +59,7 @@ async function handleUpdateNewChat(update) {
 
 async function handleUpdateNewMessage(update) {
   // Persist the Chat
-  const chat = await prisma.chat.upsert({
+  await prisma.chat.upsert({
     where: {
       id: update.message.chatId
     },
@@ -74,15 +74,19 @@ async function handleUpdateNewMessage(update) {
 
   // Persist the Sender
   try {
-    const sender = await prisma.user.upsert({
-      where: {
-        id: update.message.sender.userId
-      },
-      create: {
-        id: update.message.sender.userId
-      },
-      update: {}
-    });
+    if (update?.message?.sender?.userId) {
+      await prisma.user.upsert({
+        where: {
+          id: update.message.sender.userId
+        },
+        create: {
+          id: update.message.sender.userId
+        },
+        update: {}
+      });
+    } else {
+      logger.info('No sender in updateNewMessage... ignoring');
+    }
   } catch (error) {
     logger.error(
       'Caught Error in handleUpdateNewMessage - Persist the Sender - update=%s error=%s',
@@ -129,16 +133,41 @@ async function handleUpdateUser(update) {
 }
 
 async function handleUpdateSupergroup(update) {
+  // The update.supergroupId value comes as 'small' number without the '-100' prefix
+  let groupId = `-100${update?.supergroup?.id}`;
+
   await prisma.chat.upsert({
     where: {
-      id: update.supergroup.id
+      id: BigInt(groupId)
     },
     update: {
       memberCount: update.supergroup.memberCount
     },
     create: {
-      id: update.supergroup.id,
+      id: BigInt(groupId),
       memberCount: update.supergroup.memberCoun
+    }
+  });
+}
+
+async function handleUpdateSupergroupFullInfo(update) {
+  // The update.supergroupId value comes as 'small' number without the '-100' prefix
+  let groupId = `-100${update.supergroupId}`;
+
+  await prisma.chat.upsert({
+    where: {
+      id: BigInt(groupId)
+    },
+    update: {
+      memberCount: update?.supergroupFullInfo.memberCount,
+      minithumbnail: update?.supergroupFullInfo?.photo?.minithumbnail?.data,
+      description: update?.supergroupFullInfo?.description
+    },
+    create: {
+      id: BigInt(groupId),
+      memberCount: update?.supergroupFullInfo.memberCount,
+      minithumbnail: update?.supergroupFullInfo?.photo?.minithumbnail?.data,
+      description: update?.supergroupFullInfo?.description
     }
   });
 }
@@ -180,5 +209,6 @@ module.exports = {
   handleUpdateNewChat,
   handleUpdateUser,
   handleUpdateSupergroup,
-  handleUpdateUserStatus
+  handleUpdateUserStatus,
+  handleUpdateSupergroupFullInfo
 };

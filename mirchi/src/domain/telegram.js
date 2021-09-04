@@ -6,7 +6,8 @@ const {
   handleUpdateUser,
   handleUpdateSupergroup,
   handleUpdate,
-  handleUpdateUserStatus
+  handleUpdateUserStatus,
+  handleUpdateSupergroupFullInfo
 } = require('./db');
 
 const logger = require('./logger');
@@ -44,7 +45,7 @@ async function initTelegram() {
       logger.error(
         'Caught Error in all updates middleware - error=%s update=%s',
         error,
-        JSON.stringify(update)
+        JSON.stringify(ctx.update)
       );
     }
     return next();
@@ -62,7 +63,7 @@ async function initTelegram() {
       logger.error(
         'Caught Error in updateNewChat middleware - error=%s update=%s',
         error,
-        JSON.stringify(update)
+        JSON.stringify(ctx.update)
       );
     }
     return next();
@@ -81,7 +82,7 @@ async function initTelegram() {
       logger.error(
         'Caught Error in updateNewMessage middleware - error=%s update=%s',
         error,
-        JSON.stringify(update)
+        JSON.stringify(ctx.update)
       );
     }
     return next();
@@ -95,7 +96,7 @@ async function initTelegram() {
       logger.error(
         'Caught Error in updateUser middleware - error=%s update=%s',
         error,
-        JSON.stringify(update)
+        JSON.stringify(ctx.update)
       );
     }
     return next();
@@ -109,21 +110,35 @@ async function initTelegram() {
       logger.error(
         'Caught Error in updateUserStatus middleware  - error=%s update=%s',
         error,
-        JSON.stringify(update)
+        JSON.stringify(ctx.update)
       );
     }
     return next();
   });
 
   airgram.on('updateSupergroup', async (ctx, next) => {
-    logger.debug('[update] updateSupergroup id=%s', ctx.update);
+    logger.debug('[update] updateSupergroup update=%s', ctx.update);
     try {
       await handleUpdateSupergroup(ctx.update);
     } catch (error) {
       logger.error(
         'Caught Error in updateSupergroup middleware - error=%s update=%s',
         error,
-        JSON.stringify(update)
+        JSON.stringify(ctx.update)
+      );
+    }
+    return next();
+  });
+
+  airgram.on('updateSupergroupFullInfo', async (ctx, next) => {
+    logger.debug('[update] updateSupergroupFullInfo update=%s', ctx.update);
+    try {
+      await handleUpdateSupergroupFullInfo(ctx.update);
+    } catch (error) {
+      logger.error(
+        'Caught Error in updateSupergroupFullInfo middleware - error=%s update=%s',
+        error,
+        JSON.stringify(ctx.update)
       );
     }
     return next();

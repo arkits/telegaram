@@ -28,6 +28,8 @@ model Chat {
   Message        Message[]
   memberCount    Int?
   timeLastActive DateTime? @db.Timestamp(6)
+  minithumbnail  String?
+  description    String?
 }
 
 model User {
