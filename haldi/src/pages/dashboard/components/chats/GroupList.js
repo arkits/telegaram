@@ -79,9 +79,11 @@ const GroupList = observer(({ setSelectedChat }) => {
 
   return (
     <List className={classes.root}>
-      {Object.values(store.chats).map(function (chat, idx) {
-        return <ChatListing key={idx} chat={chat} setSelectedChat={setSelectedChat} />;
-      })}
+      {Object.values(store.chats)
+        .filter((v) => v?.messages?.length > 1)
+        .map((chat, idx) => {
+          return <ChatListing key={idx} chat={chat} setSelectedChat={setSelectedChat} />;
+        })}
     </List>
   );
 });

@@ -12,7 +12,7 @@ function MessagesList({ selectedChat }) {
       els.push(
         <div key={idx}>
           {JSON.stringify(element)}
-          <br />  <br />
+          <br /> <br />
         </div>
       );
     });
@@ -22,22 +22,7 @@ function MessagesList({ selectedChat }) {
 
   return (
     <>
-      <Card
-        style={{
-          height: '90vh',
-          maxHeight: '90vh',
-          width: '100%',
-          maxWidth: '75vw',
-          overflow: 'scroll'
-        }}
-      >
-        <CardContent>
-          <Typography variant="h4" style={{ fontFamily: 'Barlow', fontWeight: '700' }}>
-            {selectedChat?.title}
-          </Typography>
-          <RenderMessages />
-        </CardContent>
-      </Card>
+      <RenderMessages />
     </>
   );
 }

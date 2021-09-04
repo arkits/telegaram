@@ -8,7 +8,8 @@ function App() {
     palette: {
       type: 'dark',
       background: {
-        default: '#121212'
+        default: '#121212',
+        paper: '#1E1E1E'
       }
     },
     typography: {

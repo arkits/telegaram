@@ -9,7 +9,12 @@ async function getChats() {
     orderBy: {
       timeLastActive: 'desc'
     },
-    take: 50
+    take: 50,
+    where: {
+      NOT: {
+        timeLastActive: null
+      }
+    }
   });
   return chats;
 }
