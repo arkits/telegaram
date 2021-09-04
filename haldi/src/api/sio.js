@@ -15,6 +15,11 @@ const SioClient = observer(() => {
       store.setSioConnected(true);
     });
 
+    newSocket.on('disconnect', (data) => {
+      // console.log('[sio] Disconnected SIO');
+      store.setSioConnected(false);
+    });
+
     newSocket.on('chatUpdate', (chat) => {
       //  console.log('[sio] chatUpdate', data);
       store.addChat(chat);
@@ -28,6 +33,11 @@ const SioClient = observer(() => {
     newSocket.on('userUpdate', (user) => {
       //  console.log('[sio] userUpdate', user);
       store.addUser(user);
+    });
+
+    newSocket.on('tdlibConnectionState', (connectionState) => {
+      //  console.log('[sio] userUpdate', user);
+      store.setTdlibConnectionState(connectionState);
     });
 
     setSocket(newSocket);

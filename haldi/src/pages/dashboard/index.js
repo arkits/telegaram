@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { CssBaseline, AppBar, Toolbar, Typography } from '@material-ui/core/';
+import { CssBaseline, AppBar, Toolbar, Typography, Button } from '@material-ui/core/';
 import useStyles from './style';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import About from './components/About';
@@ -30,9 +30,15 @@ const Dashboard = observer(() => {
                 fontWeight: 'bold'
               }}
             >
-              Telegaram | {JSON.stringify(store.sioConnected)}
+              Telegaram
             </Typography>
-            <Typography variant="h6" noWrap></Typography>
+            <Button variant="outlined" style={{ fontWeight: '700', marginRight: '10px' }}>
+              TDLIB: {store.tdlibConnectionState}
+            </Button>
+
+            <Button variant="outlined" style={{ fontWeight: '700' }}>
+              SIO: {store.sioConnected ? 'connected' : 'disconnected'}
+            </Button>
           </Toolbar>
         </AppBar>
 

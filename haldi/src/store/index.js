@@ -6,6 +6,7 @@ class Store {
   selectedChatIdx = null;
   sioConnected = false;
   users = {};
+  tdlibConnectionState = '';
 
   constructor() {
     makeAutoObservable(this);
@@ -58,6 +59,10 @@ class Store {
 
   addUser(user) {
     this.users[String(user.id)] = user;
+  }
+
+  setTdlibConnectionState(connectionState) {
+    this.tdlibConnectionState = connectionState;
   }
 }
 
