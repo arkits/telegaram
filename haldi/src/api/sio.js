@@ -15,9 +15,9 @@ const SioClient = observer(() => {
       store.setSioConnected(true);
     });
 
-    newSocket.on('chatUpdate', (data) => {
+    newSocket.on('chatUpdate', (chat) => {
       //  console.log('[sio] chatUpdate', data);
-      store.addChat(data);
+      store.addChat(chat);
     });
 
     newSocket.on('chatMessage', (data) => {

@@ -6,7 +6,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import { getChats, getMessages } from '../../../../api/fetches';
 import { observer } from 'mobx-react-lite';
 import { StoreContext } from '../../../../store';
 
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ChatListing = observer(({ chat }) => {
+const ChatListing = observer(({ chat, idx }) => {
   const store = useContext(StoreContext);
 
   return (
@@ -53,8 +52,11 @@ const GroupList = observer(() => {
     <List className={classes.root}>
       {Object.values(store.chats)
         .filter((v) => v?.messages?.length > 1)
+        .sort((a, b) => {
+          return new Date(b?.lastMessage?.createdAt) - new Date(a?.lastMessage?.createdAt);
+        })
         .map((chat, idx) => {
-          return <ChatListing key={chat.id} chat={chat} />;
+          return <ChatListing key={chat.id} chat={chat} idx={idx} />;
         })}
     </List>
   );

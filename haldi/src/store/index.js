@@ -19,7 +19,10 @@ class Store {
     if (!lastMessageText) {
       lastMessageText = chat?.lastMessage?.content?._;
     }
-    chat['subtitle'] = lastMessageText;
+
+    let lastMessageAuthor = chat?.lastMessage?.authorId;
+
+    chat['subtitle'] = `${lastMessageAuthor}: ${lastMessageText?.substring(0, 20)}`;
 
     this.chats[chat.id] = chat;
   }
@@ -33,7 +36,10 @@ class Store {
     if (!lastMessageText) {
       lastMessageText = message?.content?._;
     }
-    chat['subtitle'] = lastMessageText;
+
+    let lastMessageAuthor = chat?.lastMessage?.authorId;
+
+    chat['subtitle'] = `${lastMessageAuthor}: ${lastMessageText?.substring(0, 20)}`;
 
     this.chats[chat.id] = chat;
   }
