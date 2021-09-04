@@ -1,5 +1,11 @@
 const { Airgram, Auth, prompt, toObject } = require('airgram');
-const { handleUpdateNewChat, handleUpdateNewMessage } = require('./db');
+const {
+  handleUpdateNewChat,
+  handleUpdateNewMessage,
+  handleUpdateUser,
+  handleUpdateSupergroup,
+  handleUpdate
+} = require('./db');
 
 const logger = require('./logger');
 
@@ -24,6 +30,19 @@ async function initTelegram() {
     })
   );
 
+  airgram.use((ctx, next) => {
+    // there can be empty update sometimes...
+    if (!ctx.update) {
+      return next();
+    }
+    try {
+      handleUpdate(ctx.update);
+    } catch (error) {
+      logger.error('Caught Error in all updates middleware -', error);
+    }
+    return next();
+  });
+
   airgram.on('updateNewChat', async (ctx, next) => {
     logger.debug('[update] updateNewChat chat.id=%s', ctx.update.chat.id);
     try {
@@ -42,6 +61,36 @@ async function initTelegram() {
     );
     try {
       await handleUpdateNewMessage(ctx.update);
+    } catch (error) {
+      logger.error('Caught Error in updateNewMessage middleware -', error);
+    }
+    return next();
+  });
+
+  airgram.on('updateUser', async (ctx, next) => {
+    logger.debug('[update] updateUser id=%s', ctx.update.user.id);
+    try {
+      await handleUpdateUser(ctx.update);
+    } catch (error) {
+      logger.error('Caught Error in updateNewMessage middleware -', error);
+    }
+    return next();
+  });
+
+  airgram.on('updateUserStatus', async (ctx, next) => {
+    logger.debug('[update] updateUserStatus id=%s', ctx.update.user.id);
+    try {
+      await handleUpdateUser(ctx.update);
+    } catch (error) {
+      logger.error('Caught Error in updateNewMessage middleware -', error);
+    }
+    return next();
+  });
+
+  airgram.on('updateSupergroup', async (ctx, next) => {
+    logger.debug('[update] updateSupergroup id=%s', ctx.update.user.id);
+    try {
+      await handleUpdateSupergroup(ctx.update);
     } catch (error) {
       logger.error('Caught Error in updateNewMessage middleware -', error);
     }

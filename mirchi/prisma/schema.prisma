@@ -22,15 +22,26 @@ model Message {
 }
 
 model Chat {
-  id             BigInt       @id @unique
+  id             BigInt    @id @unique
   title          String?
   type           String?
   Message        Message[]
-  timeLastActive DateTime  @db.Timestamp(6)
+  memberCount    Int?
+  timeLastActive DateTime? @db.Timestamp(6)
 }
 
 model User {
-  id       BigInt       @id @unique
-  username String?   @db.VarChar(255)
-  messages Message[]
+  id        BigInt    @id @unique
+  username  String?   @db.VarChar(255)
+  firstName String?   @db.VarChar(255)
+  lastName  String?   @db.VarChar(255)
+  status    String?   @db.VarChar(255)
+  type      String?   @db.VarChar(255)
+  messages  Message[]
+}
+
+model Update {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  update    Json     @db.Json
 }

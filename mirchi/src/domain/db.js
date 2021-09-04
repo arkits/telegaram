@@ -14,6 +14,19 @@ async function getChats() {
   return chats;
 }
 
+async function getMessagesByChat(chatId) {
+  const messages = await prisma.message.findMany({
+    where: {
+      chatId: BigInt(chatId)
+    },
+    take: 50,
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+  return messages;
+}
+
 async function handleUpdateNewChat(update) {
   const chat = await prisma.chat.upsert({
     where: {
@@ -71,22 +84,60 @@ async function handleUpdateNewMessage(update) {
   });
 }
 
-async function getMessagesByChat(chatId) {
-  const messages = await prisma.message.findMany({
+async function handleUpdateUser(update) {
+  const user = await prisma.user.upsert({
     where: {
-      chatId: BigInt(chatId)
+      id: update.user.id
     },
-    take: 50,
-    orderBy: {
-      createdAt: 'desc'
+    update: {
+      username: update?.user?.username,
+      firstName: update?.user?.firstName,
+      lastName: update?.user?.lastName,
+      status: update?.user?.status._,
+      type: update?.user?.type?._
+    },
+    create: {
+      id: update.user.id,
+      username: update?.user?.username,
+      firstName: update?.user?.firstName,
+      lastName: update?.user?.lastName,
+      status: update?.user?.status._,
+      type: update?.user?.type?._
     }
   });
-  return messages;
+  return;
 }
 
+async function handleUpdateSupergroup(update) {
+  const chat = await prisma.chat.upsert({
+    where: {
+      id: update.supergroup.id
+    },
+    update: {
+      memberCount: update.supergroup.memberCount
+    },
+    create: {
+      id: update.supergroup.id,
+      memberCount: update.supergroup.memberCoun
+    }
+  });
+}
+
+async function handleUpdate(update) {
+  logger.debug('persisting update=%s', JSON.stringify(update));
+
+  await prisma.update.create({
+    data: {
+      update: JSON.parse(JSON.stringify(update))
+    }
+  });
+}
 module.exports = {
   getChats,
+  getMessagesByChat,
+  handleUpdate,
   handleUpdateNewMessage,
   handleUpdateNewChat,
-  getMessagesByChat
+  handleUpdateUser,
+  handleUpdateSupergroup
 };
