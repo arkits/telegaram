@@ -3,6 +3,7 @@ import { createContext } from 'react';
 class Store {
   secondsPassed = 0;
   chats = {};
+  selectedChatIdx = null;
   sioConnected = false;
 
   constructor() {
@@ -19,15 +20,18 @@ class Store {
 
   addMessageToChat(message) {
     let chat = this.chats[message.chatId];
-
-    chat?.messages?.push(message);
-    console.log('Appended message');
+    chat['messages'] = [message].concat(chat?.messages);
+    chat['lastMessage'] = message;
 
     this.chats[chat.id] = chat;
   }
 
   setSioConnected(sioConnected) {
     this.sioConnected = sioConnected;
+  }
+
+  setSelectedChatIdx(idx) {
+    this.selectedChatIdx = idx;
   }
 }
 

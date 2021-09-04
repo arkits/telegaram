@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -23,7 +23,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ChatListing({ chat, setSelectedChat }) {
+const ChatListing = observer(({ chat }) => {
+  const store = useContext(StoreContext);
+
   const RenderLastMessage = () => {
     let lastMessageText = chat?.lastMessage?.content?.text?.text;
     if (!lastMessageText) {
@@ -37,7 +39,7 @@ function ChatListing({ chat, setSelectedChat }) {
       <ListItem
         alignItems="flex-start"
         onClick={() => {
-          setSelectedChat(chat);
+          store.setSelectedChatIdx(chat.id);
         }}
       >
         <ListItemAvatar>
@@ -48,9 +50,9 @@ function ChatListing({ chat, setSelectedChat }) {
       <Divider variant="inset" component="li" />
     </>
   );
-}
+});
 
-const GroupList = observer(({ setSelectedChat }) => {
+const GroupList = observer(() => {
   const classes = useStyles();
 
   const store = useContext(StoreContext);
@@ -60,7 +62,7 @@ const GroupList = observer(({ setSelectedChat }) => {
       {Object.values(store.chats)
         .filter((v) => v?.messages?.length > 1)
         .map((chat, idx) => {
-          return <ChatListing key={idx} chat={chat} setSelectedChat={setSelectedChat} />;
+          return <ChatListing key={idx} chat={chat} />;
         })}
     </List>
   );

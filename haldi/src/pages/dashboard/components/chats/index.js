@@ -9,10 +9,12 @@ import {
   Card,
   CardContent
 } from '@material-ui/core';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import React from 'react';
 import GroupList from './GroupList';
 import MessagesList from './MessagesList';
+import { observer } from 'mobx-react-lite';
+import { StoreContext } from '../../../../store';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -37,8 +39,11 @@ function a11yProps(index) {
   };
 }
 
-function Chats() {
-  const [selectedChat, setSelectedChat] = useState(null);
+const Chats = observer(() => {
+  const store = useContext(StoreContext);
+
+  let selectedChat = store.chats[store.selectedChatIdx];
+
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -48,7 +53,7 @@ function Chats() {
     <>
       <Grid container>
         <Grid item xs={3}>
-          <GroupList setSelectedChat={setSelectedChat} />
+          <GroupList />
         </Grid>
         <Grid item xs={9} style={{ padding: '20px' }}>
           <Card
@@ -73,23 +78,24 @@ function Chats() {
               <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
                 <Tab label="Messages" {...a11yProps(0)} />
                 <Tab label="Details" {...a11yProps(1)} />
-                <Tab label="Item Three" {...a11yProps(2)} />
               </Tabs>
             </AppBar>
+
             <TabPanel value={value} index={0}>
               <MessagesList selectedChat={selectedChat} />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <pre>{JSON.stringify(selectedChat, null, 4)}</pre>
             </TabPanel>
-            <TabPanel value={value} index={2}>
-              Item Three
-            </TabPanel>
+
+            <Card style={{ backgroundColor: '#b22a00' }}>
+              <CardContent>Actions</CardContent>
+            </Card>
           </Card>
         </Grid>
       </Grid>
     </>
   );
-}
+});
 
 export default Chats;

@@ -1,5 +1,7 @@
-import { Card, CardContent, Typography } from '@material-ui/core';
+import { Card, CardContent, Typography, Divider } from '@material-ui/core';
 import { Fragment } from 'react';
+import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+
 function MessagesList({ selectedChat }) {
   const RenderMessages = () => {
     let messages = selectedChat?.messages;
@@ -14,9 +16,11 @@ function MessagesList({ selectedChat }) {
         <Fragment key={idx}>
           <Card style={{ backgroundColor: '#263238' }}>
             <CardContent>
-              <Typography variant="body2">{message?.createdAt}</Typography>
-              <Typography variant="body2">Type: {message?.content?._}</Typography>
-              <hr />
+              <Typography variant="body2">
+                {formatDistance(new Date(message?.createdAt), new Date(), { addSuffix: true })} |
+                Type: {message?.content?._}
+              </Typography>
+              <Divider style={{ marginTop: '10px', marginBottom: '10px' }} />
               <Typography variant="body1">{message?.content?.text?.text}</Typography>
             </CardContent>
           </Card>
@@ -25,13 +29,15 @@ function MessagesList({ selectedChat }) {
       );
     });
 
-    return els;
+    return els.sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
   };
 
   return (
-    <>
+    <div style={{ maxHeight: '60vh', overflow: 'scroll' }}>
       <RenderMessages />
-    </>
+    </div>
   );
 }
 
