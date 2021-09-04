@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Drawer,
@@ -15,6 +15,8 @@ import TimelineRoundedIcon from '@material-ui/icons/TimelineRounded';
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded';
 import IconButton from '@material-ui/core/IconButton';
 import { Link as RouterLink } from 'react-router-dom';
+import { StoreContext } from '../../../store';
+import { observer } from 'mobx-react-lite';
 
 const useStyles = makeStyles({
   drawer: {
@@ -22,9 +24,11 @@ const useStyles = makeStyles({
   }
 });
 
-function AppDrawer() {
+const AppDrawer = observer(() => {
   const classes = useStyles();
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const store = useContext(StoreContext);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -103,6 +107,6 @@ function AppDrawer() {
       </React.Fragment>
     </div>
   );
-}
+});
 
 export default AppDrawer;

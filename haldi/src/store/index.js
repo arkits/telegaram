@@ -3,6 +3,7 @@ import { createContext } from 'react';
 class Store {
   secondsPassed = 0;
   chats = {};
+  sioConnected = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -14,6 +15,19 @@ class Store {
 
   addChat(chat) {
     this.chats[chat.id] = chat;
+  }
+
+  addMessageToChat(message) {
+    let chat = this.chats[message.chatId];
+
+    chat?.messages?.push(message);
+    console.log('Appended message');
+
+    this.chats[chat.id] = chat;
+  }
+
+  setSioConnected(sioConnected) {
+    this.sioConnected = sioConnected;
   }
 }
 

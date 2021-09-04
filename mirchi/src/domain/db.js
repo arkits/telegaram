@@ -87,6 +87,8 @@ async function handleUpdateNewMessage(update) {
       chatId: update.message.chatId
     }
   });
+
+  return message;
 }
 
 async function handleUpdateUser(update) {

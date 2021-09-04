@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { CssBaseline, AppBar, Toolbar, Typography } from '@material-ui/core/';
 import useStyles from './style';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -6,9 +6,12 @@ import About from './components/About';
 import AppDrawer from './components/AppDrawer';
 import Settings from './components/Settings';
 import Chats from './components/chats';
+import { StoreContext } from '../../store';
+import { observer } from 'mobx-react-lite';
 
-function Dashboard() {
+const Dashboard = observer(() => {
   const classes = useStyles();
+  const store = useContext(StoreContext);
 
   return (
     <div className={classes.root}>
@@ -27,7 +30,7 @@ function Dashboard() {
                 fontWeight: 'bold'
               }}
             >
-              Telegaram
+              Telegaram | {JSON.stringify(store.sioConnected)}
             </Typography>
             <Typography variant="h6" noWrap></Typography>
           </Toolbar>
@@ -51,6 +54,6 @@ function Dashboard() {
       </Router>
     </div>
   );
-}
+});
 
 export default Dashboard;

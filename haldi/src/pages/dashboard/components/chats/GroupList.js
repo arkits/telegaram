@@ -24,6 +24,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ChatListing({ chat, setSelectedChat }) {
+  const RenderLastMessage = () => {
+    let lastMessageText = chat?.lastMessage?.content?.text?.text;
+    if (!lastMessageText) {
+      lastMessageText = chat?.lastMessage?.content?._;
+    }
+    return lastMessageText;
+  };
+
   return (
     <>
       <ListItem
@@ -35,7 +43,7 @@ function ChatListing({ chat, setSelectedChat }) {
         <ListItemAvatar>
           <Avatar alt={chat.title} src="/" />
         </ListItemAvatar>
-        <ListItemText primary={chat.title} secondary={chat?.lastMessage} />
+        <ListItemText primary={chat.title} secondary={<RenderLastMessage />} />
       </ListItem>
       <Divider variant="inset" component="li" />
     </>
@@ -46,36 +54,6 @@ const GroupList = observer(({ setSelectedChat }) => {
   const classes = useStyles();
 
   const store = useContext(StoreContext);
-
-  useEffect(() => {
-    getChats()
-      .then((res) => res.json())
-      .then((resJson) => {
-        resJson.forEach((chat) => {
-          store.addChat(chat);
-
-          getMessages(chat.id)
-            .then((res) => res.json())
-            .then((resJson) => {
-              let lastMessage = resJson?.[0];
-              if (!lastMessage) {
-                return;
-              }
-
-              let lastMessageText = lastMessage?.content?.text?.text;
-              if (!lastMessageText) {
-                lastMessageText = lastMessage?.content?._;
-              }
-
-              let chatToUpdate = chat;
-              chatToUpdate['lastMessage'] = lastMessageText;
-              chatToUpdate['messages'] = resJson;
-
-              store.addChat(chatToUpdate);
-            });
-        });
-      });
-  }, []);
 
   return (
     <List className={classes.root}>

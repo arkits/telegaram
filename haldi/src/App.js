@@ -1,7 +1,7 @@
-import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Dashboard from './pages/dashboard';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import SioClient from './api/sio';
 
 function App() {
   const theme = createTheme({
@@ -19,6 +19,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <SioClient />
       <Router basename={process.env.PUBLIC_URL}>
         <div>
           <Switch>

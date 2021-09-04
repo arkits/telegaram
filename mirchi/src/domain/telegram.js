@@ -1,4 +1,5 @@
 const { Airgram, Auth, prompt, toObject } = require('airgram');
+const { getIo } = require('../api/sio');
 const {
   handleUpdateNewChat,
   handleUpdateNewMessage,
@@ -9,6 +10,7 @@ const {
 } = require('./db');
 
 const logger = require('./logger');
+const { serializeJson } = require('./utils');
 
 // Shared Airgram instance
 let airgram = null;
@@ -61,7 +63,8 @@ async function initTelegram() {
       ctx.update.message.chatId
     );
     try {
-      await handleUpdateNewMessage(ctx.update);
+      const message = await handleUpdateNewMessage(ctx.update);
+      getIo().emit('chatMessage', serializeJson(message));
     } catch (error) {
       logger.error('Caught Error in updateNewMessage middleware -', error);
     }
@@ -73,7 +76,7 @@ async function initTelegram() {
     try {
       await handleUpdateUser(ctx.update);
     } catch (error) {
-      logger.error('Caught Error in updateNewMessage middleware -', error);
+      logger.error('Caught Error in updateUser middleware -', error);
     }
     return next();
   });
@@ -83,7 +86,7 @@ async function initTelegram() {
     try {
       await handleUpdateUserStatus(ctx.update);
     } catch (error) {
-      logger.error('Caught Error in updateNewMessage middleware -', error);
+      logger.error('Caught Error in updateUserStatus middleware -', error);
     }
     return next();
   });
@@ -93,7 +96,7 @@ async function initTelegram() {
     try {
       await handleUpdateSupergroup(ctx.update);
     } catch (error) {
-      logger.error('Caught Error in updateNewMessage middleware -', error);
+      logger.error('Caught Error in updateSupergroup middleware -', error);
     }
     return next();
   });
