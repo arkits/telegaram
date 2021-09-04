@@ -9,7 +9,7 @@ const {
   handleUpdateUserStatus,
   handleUpdateSupergroupFullInfo
 } = require('./db');
-
+const { garamCache } = require('../domain/cache');
 const logger = require('./logger');
 const { serializeJson } = require('./utils');
 
@@ -52,7 +52,15 @@ async function initTelegram() {
   });
 
   airgram.on('updateConnectionState', (ctx, next) => {
-    logger.info('updateConnectionState=%s', ctx.update.state._);
+    let tdlibConnectionState = ctx.update.state._;
+    if (tdlibConnectionState.startsWith('connectionState')) {
+      tdlibConnectionState = tdlibConnectionState.split('connectionState')[1];
+    }
+
+    logger.info('updateConnectionState=%s', tdlibConnectionState);
+
+    garamCache.tdlibConnectionState = tdlibConnectionState;
+    getIo().emit('tdlibConnectionState', tdlibConnectionState);
   });
 
   airgram.on('updateNewChat', async (ctx, next) => {
