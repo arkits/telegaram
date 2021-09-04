@@ -34,7 +34,10 @@ const ChatListing = observer(({ chat, idx }) => {
         }}
       >
         <ListItemAvatar>
-          <Avatar alt={chat.title} src="/" />
+          <Avatar
+            alt={chat.title}
+            src={chat?.minithumbnail ? `data:image/png;base64,${chat.minithumbnail}` : '/'}
+          />
         </ListItemAvatar>
         <ListItemText primary={chat.title} secondary={chat.subtitle} />
       </ListItem>
