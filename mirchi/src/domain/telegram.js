@@ -4,7 +4,8 @@ const {
   handleUpdateNewMessage,
   handleUpdateUser,
   handleUpdateSupergroup,
-  handleUpdate
+  handleUpdate,
+  handleUpdateUserStatus
 } = require('./db');
 
 const logger = require('./logger');
