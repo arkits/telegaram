@@ -1,6 +1,6 @@
-import { Card, CardContent, Typography, Divider } from '@material-ui/core';
+import { Card, CardContent, Typography, Divider, Grid } from '@material-ui/core';
 import { Fragment } from 'react';
-import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+import { formatDistance } from 'date-fns';
 
 function MessagesList({ selectedChat }) {
   const RenderMessages = () => {
@@ -14,17 +14,24 @@ function MessagesList({ selectedChat }) {
     messages.forEach((message, idx) => {
       els.push(
         <Fragment key={idx}>
-          <Card style={{ backgroundColor: '#263238' }}>
+          <Card elevation={5} style={{ backgroundColor: '#263238', marginBottom: '5px' }}>
             <CardContent>
-              <Typography variant="body2">
-                {formatDistance(new Date(message?.createdAt), new Date(), { addSuffix: true })} |
-                Type: {message?.content?._}
-              </Typography>
-              <Divider style={{ marginTop: '10px', marginBottom: '10px' }} />
-              <Typography variant="body1">{message?.content?.text?.text}</Typography>
+              <Grid container spacing={3}>
+                <Grid item xs={3}>
+                  <Typography variant="body2">
+                    {formatDistance(new Date(message?.createdAt), new Date(), { addSuffix: true })}{' '}
+                    <br />
+                    Author: {message?.authorId}
+                  </Typography>
+                </Grid>
+                <Grid item xs={9}>
+                  <Typography variant="body1">
+                    {message?.content?.text?.text || message?.content?._}
+                  </Typography>
+                </Grid>
+              </Grid>
             </CardContent>
           </Card>
-          <br /> <br />
         </Fragment>
       );
     });

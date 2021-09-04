@@ -88,8 +88,11 @@ const Chats = observer(() => {
               <pre>{JSON.stringify(selectedChat, null, 4)}</pre>
             </TabPanel>
 
-            <Card style={{ backgroundColor: '#b22a00' }}>
-              <CardContent>Actions</CardContent>
+            <Card style={{ backgroundColor: '#b22a00', height: '100%' }}>
+              <CardContent>
+                Actions
+                <br />
+              </CardContent>
             </Card>
           </Card>
         </Grid>
