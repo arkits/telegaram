@@ -15,7 +15,7 @@ function createSio(server) {
   });
 
   io.on('connection', async (socket) => {
-    logger.info('[sio] New connection... sending init data');
+    logger.info('[sio] New connection... Sending init payloads');
 
     const chats = await getChats();
 

@@ -41,9 +41,17 @@ async function initTelegram() {
     try {
       handleUpdate(ctx.update);
     } catch (error) {
-      logger.error('Caught Error in all updates middleware -', error);
+      logger.error(
+        'Caught Error in all updates middleware - error=%s update=%s',
+        error,
+        JSON.stringify(update)
+      );
     }
     return next();
+  });
+
+  airgram.on('updateConnectionState', (ctx, next) => {
+    logger.info('updateConnectionState=%s', ctx.update.state._);
   });
 
   airgram.on('updateNewChat', async (ctx, next) => {
@@ -51,7 +59,11 @@ async function initTelegram() {
     try {
       await handleUpdateNewChat(ctx.update);
     } catch (error) {
-      logger.error('Caught Error in updateNewChat middleware -', error);
+      logger.error(
+        'Caught Error in updateNewChat middleware - error=%s update=%s',
+        error,
+        JSON.stringify(update)
+      );
     }
     return next();
   });
@@ -66,7 +78,11 @@ async function initTelegram() {
       const message = await handleUpdateNewMessage(ctx.update);
       getIo().emit('chatMessage', serializeJson(message));
     } catch (error) {
-      logger.error('Caught Error in updateNewMessage middleware -', error);
+      logger.error(
+        'Caught Error in updateNewMessage middleware - error=%s update=%s',
+        error,
+        JSON.stringify(update)
+      );
     }
     return next();
   });
@@ -76,7 +92,11 @@ async function initTelegram() {
     try {
       await handleUpdateUser(ctx.update);
     } catch (error) {
-      logger.error('Caught Error in updateUser middleware -', error);
+      logger.error(
+        'Caught Error in updateUser middleware - error=%s update=%s',
+        error,
+        JSON.stringify(update)
+      );
     }
     return next();
   });
@@ -86,7 +106,11 @@ async function initTelegram() {
     try {
       await handleUpdateUserStatus(ctx.update);
     } catch (error) {
-      logger.error('Caught Error in updateUserStatus middleware -', error);
+      logger.error(
+        'Caught Error in updateUserStatus middleware  - error=%s update=%s',
+        error,
+        JSON.stringify(update)
+      );
     }
     return next();
   });
@@ -96,7 +120,11 @@ async function initTelegram() {
     try {
       await handleUpdateSupergroup(ctx.update);
     } catch (error) {
-      logger.error('Caught Error in updateSupergroup middleware -', error);
+      logger.error(
+        'Caught Error in updateSupergroup middleware - error=%s update=%s',
+        error,
+        JSON.stringify(update)
+      );
     }
     return next();
   });

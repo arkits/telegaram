@@ -85,8 +85,8 @@ async function handleUpdateNewMessage(update) {
     });
   } catch (error) {
     logger.error(
-      'Caught Error in handleUpdateNewMessage - Persist the Sender - ',
-      update.message.sender,
+      'Caught Error in handleUpdateNewMessage - Persist the Sender - update=%s error=%s',
+      JSON.stringify(update),
       error
     );
   }
