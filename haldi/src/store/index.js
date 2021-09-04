@@ -15,6 +15,12 @@ class Store {
   }
 
   addChat(chat) {
+    let lastMessageText = chat?.lastMessage?.content?.text?.text;
+    if (!lastMessageText) {
+      lastMessageText = chat?.lastMessage?.content?._;
+    }
+    chat['subtitle'] = lastMessageText;
+
     this.chats[chat.id] = chat;
   }
 
@@ -22,6 +28,12 @@ class Store {
     let chat = this.chats[message.chatId];
     chat['messages'] = [message].concat(chat?.messages);
     chat['lastMessage'] = message;
+
+    let lastMessageText = message?.content?.text?.text;
+    if (!lastMessageText) {
+      lastMessageText = message?.content?._;
+    }
+    chat['subtitle'] = lastMessageText;
 
     this.chats[chat.id] = chat;
   }

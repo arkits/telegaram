@@ -26,14 +26,6 @@ const useStyles = makeStyles((theme) => ({
 const ChatListing = observer(({ chat }) => {
   const store = useContext(StoreContext);
 
-  const RenderLastMessage = () => {
-    let lastMessageText = chat?.lastMessage?.content?.text?.text;
-    if (!lastMessageText) {
-      lastMessageText = chat?.lastMessage?.content?._;
-    }
-    return lastMessageText;
-  };
-
   return (
     <>
       <ListItem
@@ -45,7 +37,7 @@ const ChatListing = observer(({ chat }) => {
         <ListItemAvatar>
           <Avatar alt={chat.title} src="/" />
         </ListItemAvatar>
-        <ListItemText primary={chat.title} secondary={<RenderLastMessage />} />
+        <ListItemText primary={chat.title} secondary={chat.subtitle} />
       </ListItem>
       <Divider variant="inset" component="li" />
     </>
@@ -62,7 +54,7 @@ const GroupList = observer(() => {
       {Object.values(store.chats)
         .filter((v) => v?.messages?.length > 1)
         .map((chat, idx) => {
-          return <ChatListing key={idx} chat={chat} />;
+          return <ChatListing key={chat.id} chat={chat} />;
         })}
     </List>
   );
