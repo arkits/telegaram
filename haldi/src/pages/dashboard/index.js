@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { CssBaseline, AppBar, Toolbar, Typography, Button } from '@material-ui/core/';
+import { AppBar, Toolbar, Typography, Button } from '@material-ui/core/';
 import useStyles from './style';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import About from './components/About';
@@ -15,7 +15,6 @@ const Dashboard = observer(() => {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <Router basename={process.env.PUBLIC_URL}>
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>

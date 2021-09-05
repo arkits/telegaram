@@ -58,7 +58,21 @@ class Store {
   }
 
   setSelectedChatIdx(idx) {
+    // update old chat
+    let oldChat = this.chats[this?.selectedChatIdx];
+    if (oldChat) {
+      oldChat.active = false;
+      this.addChat(oldChat);
+    }
+
     this.selectedChatIdx = idx;
+
+    // update new chat
+    let chat = this.chats[idx];
+    if (chat) {
+      chat.active = true;
+      this.chats[idx] = chat;
+    }
   }
 
   addUser(user) {
