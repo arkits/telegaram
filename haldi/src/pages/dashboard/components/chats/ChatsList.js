@@ -50,10 +50,20 @@ const ChatListing = observer(({ chat, idx }) => {
     );
   };
 
+  const calcListItemBackgroundColor = () => {
+    if (store.selectedChatIdx === chat.id) {
+      return '#dd2c00';
+    } else if (chat?.pinned) {
+      return '#37474f';
+    } else {
+      return '#1A1A1A';
+    }
+  };
+
   return (
     <>
       <ListItem
-        style={{ backgroundColor: store.selectedChatIdx === chat.id ? '#F50057' : '#1A1A1A' }}
+        style={{ backgroundColor: calcListItemBackgroundColor() }}
         alignItems="flex-start"
         onClick={() => {
           store.setSelectedChatIdx(chat.id);
@@ -72,23 +82,38 @@ const ChatListing = observer(({ chat, idx }) => {
   );
 });
 
-const GroupList = observer(() => {
+const ChatsList = observer(() => {
   const classes = useStyles();
 
   const store = useContext(StoreContext);
 
-  return (
-    <List className={classes.root}>
-      {Object.values(store.chats)
-        .filter((v) => v?.messages?.length > 0)
-        .sort((a, b) => {
-          return new Date(b?.lastMessage?.createdAt) - new Date(a?.lastMessage?.createdAt);
-        })
-        .map((chat, idx) => {
-          return <ChatListing key={chat.id} chat={chat} idx={idx} />;
-        })}
-    </List>
-  );
+  const generateChatListings = () => {
+    let chatListings = [];
+
+    Object.values(store.chats)
+      .filter((v) => v?.messages?.length > 0)
+      .filter((v) => v?.pinned)
+      .sort((a, b) => {
+        return new Date(b?.lastMessage?.createdAt) - new Date(a?.lastMessage?.createdAt);
+      })
+      .map((chat, idx) => {
+        chatListings.push(<ChatListing key={chat.id} chat={chat} idx={idx} />);
+      });
+
+    Object.values(store.chats)
+      .filter((v) => v?.messages?.length > 0)
+      .filter((v) => !v?.pinned)
+      .sort((a, b) => {
+        return new Date(b?.lastMessage?.createdAt) - new Date(a?.lastMessage?.createdAt);
+      })
+      .map((chat, idx) => {
+        chatListings.push(<ChatListing key={chat.id} chat={chat} idx={idx} />);
+      });
+
+    return chatListings;
+  };
+
+  return <List className={classes.root}>{generateChatListings()}</List>;
 });
 
-export default GroupList;
+export default ChatsList;

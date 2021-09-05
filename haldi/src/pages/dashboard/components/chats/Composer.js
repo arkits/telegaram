@@ -7,6 +7,15 @@ import { StoreContext } from '../../../../store';
 const Composer = observer(() => {
   const store = useContext(StoreContext);
   const [textFieldValue, setTextFieldValue] = useState('');
+
+  const emitSendMessage = () => {
+    store.socket.emit('req_sendMessage', {
+      text: textFieldValue,
+      chatId: store.selectedChatIdx
+    });
+    setTextFieldValue('');
+  };
+
   return (
     <Card
       elevation={0}
@@ -25,12 +34,8 @@ const Composer = observer(() => {
           value={textFieldValue}
           onChange={(e) => setTextFieldValue(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key == 'Enter') {
-              store.socket.emit('req_sendMessage', {
-                text: textFieldValue,
-                chatId: store.selectedChatIdx
-              });
-              setTextFieldValue('');
+            if (e.key === 'Enter') {
+              emitSendMessage();
             }
           }}
         />
@@ -39,11 +44,7 @@ const Composer = observer(() => {
           color="primary"
           aria-label="add"
           onClick={() => {
-            store.socket.emit('req_sendMessage', {
-              text: textFieldValue,
-              chatId: store.selectedChatIdx
-            });
-            setTextFieldValue('');
+            emitSendMessage();
           }}
         >
           <AddIcon />

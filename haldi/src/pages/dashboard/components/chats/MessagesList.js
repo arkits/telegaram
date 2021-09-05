@@ -1,22 +1,13 @@
-import { Avatar, Typography, Grid } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import { Fragment, useContext } from 'react';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import { StoreContext } from '../../../../store';
 import './style.css';
-import { makeStyles } from '@material-ui/core/styles';
 import UserInfoModal from './UserInfoModal';
 import { getPrettyUserName } from '../../../../utils';
 
-const useStyles = makeStyles((theme) => ({
-  large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7)
-  }
-}));
-
 const AuthorSignature = observer(({ authorId }) => {
-  const classes = useStyles();
   const store = useContext(StoreContext);
 
   let author = store.users[authorId];

@@ -1,7 +1,7 @@
 import { Grid, AppBar, Tabs, Box, Typography, Tab, Card, CardContent } from '@material-ui/core';
 import { useContext } from 'react';
 import React from 'react';
-import GroupList from './GroupList';
+import ChatsList from './ChatsList';
 import MessagesList from './MessagesList';
 import { observer } from 'mobx-react-lite';
 import { StoreContext } from '../../../../store';
@@ -44,7 +44,7 @@ const Chats = observer(() => {
     <>
       <Grid container>
         <Grid item xs={3}>
-          <GroupList />
+          <ChatsList />
         </Grid>
         <Grid item xs={9} style={{ padding: '20px' }}>
           <Card
