@@ -72,8 +72,7 @@ const SettingHeader = ({ children, opened }) => {
   );
 };
 
-const Setting = ({ label, icon, blue }) => {
-  const styles = useStyles();
+const DetailListing = ({ label, value }) => {
   return (
     <Box
       height={'44px'}
@@ -84,9 +83,7 @@ const Setting = ({ label, icon, blue }) => {
       alignItems={'center'}
     >
       <Typography variant={'body2'}>{label}</Typography>
-      {React.cloneElement(icon, {
-        className: cx(styles.settingIcon, blue && styles.blue)
-      })}
+      <Typography variant={'body2'}>{value}</Typography>
     </Box>
   );
 };
@@ -107,15 +104,16 @@ const ChatSettings = observer(() => {
           {chat?.title}
         </Typography>
         <Divider />
-        <SettingHeader opened>Options</SettingHeader>
+        <SettingHeader opened>Details</SettingHeader>
         <Box pb={2}>
-          <Setting label={'Search in Conversation'} icon={<Search />} />
-          <Setting label={'Edit Nicknames'} icon={<Edit />} />
-          <Setting label={'Change Theme'} icon={<FormatPaint />} blue />
-          <Setting label={'Change Emoji'} icon={<ThumbUp />} blue />
+          <DetailListing label={'Type'} value={chat?.type} />
+          <DetailListing label={'Member Count'} value={chat?.memberCount} />
+          <DetailListing label={'Time Last Active'} value={chat?.timeLastActive} />{' '}
+          <DetailListing label={'Mesages'} value={chat?.messages?.length} />{' '}
+          <DetailListing label={'Last Message Received'} value={chat?.lastMessage?.createdAt} />{' '}
         </Box>
         <Divider />
-        <SettingHeader>Details</SettingHeader>
+        <SettingHeader>Options</SettingHeader>
         <Divider />
         <SettingHeader>Members</SettingHeader>
         <Divider />

@@ -103,7 +103,7 @@ const ChatMsg = ({ avatar, messages, side }) => {
     return '';
   };
   return (
-    <Grid container spacing={2} justify={side === 'right' ? 'flex-end' : 'flex-start'}>
+    <Grid container spacing={2}>
       {side === 'left' && (
         <Grid item>
           <Avatar src={avatar} className={cx(styles.avatar)} />

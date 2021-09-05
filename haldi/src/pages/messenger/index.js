@@ -54,7 +54,8 @@ const theme = responsiveFontSizes(
         main: 'rgb(0, 153, 255)'
       },
       background: {
-        default: '#111111'
+        default: '#111111',
+        paper: '#1E1E1E'
       }
     },
     typography: {
