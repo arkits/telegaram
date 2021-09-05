@@ -9,7 +9,7 @@ const SioClient = observer(() => {
   useEffect(() => {
     const newSocket = io(
       `${window.location.protocol}//${window.location.hostname}${
-        window.location.hostname === 'localhost' ? ':3001' : ''
+        window.location.hostname === 'localhost' ? ':4206' : ''
       }`
     );
 
