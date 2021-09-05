@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "NODE_ENV=dev nodemon src/index.js",
-    "build": "pkg src/index.js -c package.json"
+    "build": "pkg src/index.js -c package.json",
+    "addHaldi": "cp -r ../haldi/build public"
   },
   "repository": {
     "type": "git",

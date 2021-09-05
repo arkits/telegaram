@@ -24,6 +24,7 @@ createSio(server);
 app.use(cors());
 
 app.use('/api', apiRouter);
+app.use(express.static('public'));
 
 server.listen(SERVER_PORT, () => {
   logger.info(`🔥 Telegaram HTTP Server running on http://localhost:${SERVER_PORT}`);
