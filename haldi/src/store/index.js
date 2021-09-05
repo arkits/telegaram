@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { createContext } from 'react';
+import { getPrettyUserName } from '../utils';
 class Store {
   secondsPassed = 0;
   chats = {};
@@ -28,8 +29,7 @@ class Store {
 
     let lastMessageAuthor = this.users[String(lastMessageAuthorId)];
     if (lastMessageAuthor) {
-      prettyLastMessageAuthor =
-        lastMessageAuthor?.username || lastMessageAuthor?.firstName || lastMessageAuthor?.id;
+      prettyLastMessageAuthor = getPrettyUserName(lastMessageAuthor);
     }
 
     return `${prettyLastMessageAuthor}: ${lastMessageText?.substring(0, 50)}`;

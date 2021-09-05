@@ -1,19 +1,36 @@
-import { Card, Typography, Grid } from '@material-ui/core';
+import { Avatar, Typography, Grid } from '@material-ui/core';
 import { Fragment, useContext } from 'react';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import { StoreContext } from '../../../../store';
 import './style.css';
+import { makeStyles } from '@material-ui/core/styles';
+import UserInfoModal from './UserInfoModal';
+import { getPrettyUserName } from '../../../../utils';
+
+const useStyles = makeStyles((theme) => ({
+  large: {
+    width: theme.spacing(7),
+    height: theme.spacing(7)
+  }
+}));
 
 const AuthorSignature = observer(({ authorId }) => {
+  const classes = useStyles();
   const store = useContext(StoreContext);
 
   let author = store.users[authorId];
 
   return (
-    <Typography style={{ paddingLeft: '15px', paddingTop: '10px' }} variant="h6">
-      {author?.username || author?.firstName || author?.id || 'Unknown User'}
-    </Typography>
+    <div>
+      <UserInfoModal userId={authorId} />
+      <Typography
+        style={{ paddingLeft: '15px', float: 'right', fontWeight: 'bold' }}
+        variant="body1"
+      >
+        {getPrettyUserName(author)}
+      </Typography>
+    </div>
   );
 });
 
