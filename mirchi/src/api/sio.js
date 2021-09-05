@@ -45,8 +45,25 @@ function createSio(server) {
       io.emit('res_getMessages', msg);
     });
 
-    socket.on('req_sendMessage', (msg) => {
-      logger.info('[sio] req_sendMessage', msg);
+    socket.on('req_sendMessage', (req) => {
+      logger.info('[sio] req_sendMessage', req);
+      garamCache.airgram.api
+        .sendMessage({
+          chatId: parseInt(req?.chatId),
+          inputMessageContent: {
+            _: 'inputMessageText',
+            text: {
+              _: 'formattedText',
+              text: req?.text
+            }
+          }
+        })
+        .then((payload) => {
+          logger.info('[sio] response sendMessage', payload);
+        })
+        .catch((err) => {
+          logger.error('[sio] response sendMessage', err);
+        });
     });
   });
 }

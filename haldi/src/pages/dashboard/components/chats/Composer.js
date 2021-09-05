@@ -24,6 +24,15 @@ const Composer = observer(() => {
           style={{ flexGrow: '1', marginRight: '15px' }}
           value={textFieldValue}
           onChange={(e) => setTextFieldValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key == 'Enter') {
+              store.socket.emit('req_sendMessage', {
+                text: textFieldValue,
+                chatId: store.selectedChatIdx
+              });
+              setTextFieldValue('');
+            }
+          }}
         />
 
         <Fab

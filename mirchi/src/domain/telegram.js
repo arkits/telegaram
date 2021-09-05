@@ -14,19 +14,19 @@ const logger = require('./logger');
 const { serializeJson } = require('./utils');
 
 // Shared Airgram instance
-let airgram = null;
+// let airgram = null;
 
 async function initTelegram() {
   logger.info('Initializing Telegram');
 
-  airgram = new Airgram({
+  garamCache.airgram = new Airgram({
     apiId: process.env.TDLIB_API_ID,
     apiHash: process.env.TDLIB_API_HASH,
     command: process.env.TDLIB_PATH,
     logVerbosityLevel: process.env.TDLIB_LOG_LEVEL
   });
 
-  airgram.use(
+  garamCache.airgram.use(
     new Auth({
       code: () => prompt('Please enter the secret code:'),
       phoneNumber: () => prompt('Please enter your phone number:'),
@@ -34,7 +34,7 @@ async function initTelegram() {
     })
   );
 
-  airgram.use((ctx, next) => {
+  garamCache.airgram.use((ctx, next) => {
     // there can be empty update sometimes...
     if (!ctx.update) {
       return next();
@@ -51,7 +51,7 @@ async function initTelegram() {
     return next();
   });
 
-  airgram.on('updateConnectionState', (ctx, next) => {
+  garamCache.airgram.on('updateConnectionState', (ctx, next) => {
     let tdlibConnectionState = ctx.update.state._;
     if (tdlibConnectionState.startsWith('connectionState')) {
       tdlibConnectionState = tdlibConnectionState.split('connectionState')[1];
@@ -63,7 +63,7 @@ async function initTelegram() {
     getIo().emit('tdlibConnectionState', tdlibConnectionState);
   });
 
-  airgram.on('updateNewChat', async (ctx, next) => {
+  garamCache.airgram.on('updateNewChat', async (ctx, next) => {
     logger.debug('[update] updateNewChat update=%s', JSON.stringify(ctx.update));
     try {
       await handleUpdateNewChat(ctx.update);
@@ -78,7 +78,7 @@ async function initTelegram() {
     return next();
   });
 
-  airgram.on('updateNewMessage', async (ctx, next) => {
+  garamCache.airgram.on('updateNewMessage', async (ctx, next) => {
     logger.debug('[update] updateNewMessage update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       const message = await handleUpdateNewMessage(ctx.update);
@@ -94,7 +94,7 @@ async function initTelegram() {
     return next();
   });
 
-  airgram.on('updateUser', async (ctx, next) => {
+  garamCache.airgram.on('updateUser', async (ctx, next) => {
     logger.debug('[update] updateUser update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       await handleUpdateUser(ctx.update);
@@ -110,7 +110,7 @@ async function initTelegram() {
   });
 
   // {"_":"updateUserStatus","userId":XXX,"status":{"_":"userStatusOnline","expires":1630794480}}
-  airgram.on('updateUserStatus', async (ctx, next) => {
+  garamCache.airgram.on('updateUserStatus', async (ctx, next) => {
     logger.debug('[update] updateUserStatus update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       await handleUpdateUserStatus(ctx.update);
@@ -125,7 +125,7 @@ async function initTelegram() {
     return next();
   });
 
-  airgram.on('updateSupergroup', async (ctx, next) => {
+  garamCache.airgram.on('updateSupergroup', async (ctx, next) => {
     logger.debug('[update] updateSupergroup update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       await handleUpdateSupergroup(ctx.update);
@@ -140,7 +140,7 @@ async function initTelegram() {
     return next();
   });
 
-  airgram.on('updateSupergroupFullInfo', async (ctx, next) => {
+  garamCache.airgram.on('updateSupergroupFullInfo', async (ctx, next) => {
     logger.debug(
       '[update] updateSupergroupFullInfo update=%s',
       JSON.stringify(serializeJson(ctx.update))
@@ -160,16 +160,16 @@ async function initTelegram() {
 }
 
 function getAirgram() {
-  return airgram;
+  return garamCache.airgram;
 }
 
 async function getMe() {
-  let me = await airgram.api.getMe();
+  let me = await garamCache.airgram.api.getMe();
   return toObject(me);
 }
 
 async function getChats() {
-  let chats = await airgram.api.getChats({
+  let chats = await garamCache.airgram.api.getChats({
     limit: 20,
     offsetChatId: 0,
     offsetOrder: '9223372036854775807'
@@ -178,7 +178,7 @@ async function getChats() {
 }
 
 async function getUserInfo(userId) {
-  let userInfo = await airgram.api.getUser({
+  let userInfo = await garamCache.airgram.api.getUser({
     userId: userId
   });
   return toObject(userInfo);

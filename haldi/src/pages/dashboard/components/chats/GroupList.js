@@ -53,6 +53,7 @@ const ChatListing = observer(({ chat, idx }) => {
   return (
     <>
       <ListItem
+        style={{ backgroundColor: store.selectedChatIdx === chat.id ? '#F50057' : '#1A1A1A' }}
         alignItems="flex-start"
         onClick={() => {
           store.setSelectedChatIdx(chat.id);
