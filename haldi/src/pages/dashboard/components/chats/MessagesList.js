@@ -15,10 +15,7 @@ const AuthorSignature = observer(({ authorId }) => {
   return (
     <div>
       <UserInfoModal userId={authorId} />
-      <Typography
-        style={{ paddingLeft: '15px', float: 'right', fontWeight: 'bold' }}
-        variant="body1"
-      >
+      <Typography style={{ paddingLeft: '15px', float: 'right' }} variant="body1">
         {getPrettyUserName(author)}
       </Typography>
     </div>

@@ -31,6 +31,10 @@ const ChatListing = observer(({ chat, idx }) => {
     let lastMessageText = chat?.lastMessage?.content?.text?.text;
     if (!lastMessageText) {
       lastMessageText = chat?.lastMessage?.content?._;
+    } else {
+      if (lastMessageText.length > 80) {
+        lastMessageText = lastMessageText.slice(0, 80) + '...';
+      }
     }
 
     let lastMessageAuthorId = chat?.lastMessage?.authorId;
@@ -43,7 +47,7 @@ const ChatListing = observer(({ chat, idx }) => {
 
     return (
       <>
-        <Typography variant="caption">
+        <Typography variant="body2">
           <b>{prettyLastMessageAuthor}: </b> {lastMessageText}
         </Typography>
       </>
