@@ -21,7 +21,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <SioClient />
-      <Router basename={process.env.PUBLIC_URL}>
+      <Router>
         <div>
           <Switch>
             <Route path="/">

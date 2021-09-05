@@ -7,7 +7,7 @@
     "start": "node src/index.js",
     "dev": "NODE_ENV=dev nodemon src/index.js",
     "build": "pkg src/index.js -c package.json",
-    "addHaldi": "cp -r ../haldi/build public"
+    "addHaldi": "rm -rf public && cd ../haldi/ && npm run build && cp -r build ../mirchi/public"
   },
   "repository": {
     "type": "git",

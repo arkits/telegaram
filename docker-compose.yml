@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  mirchi:
+    container_name: mirchi
+    image: arkits/mirchi
+    build:
+      dockerfile: ./mirchi/Dockerfile
+      context: .
+    ports:
+      - '3001:3001'

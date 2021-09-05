@@ -7,10 +7,12 @@ echo ">>> hostscript running as $(whoami)@$(hostname)"
 
 cd /home/arkits/software/telegaram/
 
+echo "==> pulling the latest"
+git pull
+
 echo "==> Build haldi - Frontend"
 cd haldi
 npm install
-npm run build
 cd ..
 
 echo "==> Build mirchi - Backend"
@@ -18,7 +20,6 @@ cd mirchi
 npm install
 
 echo "==> Add haldi to mirchi - copy frontend to server"
-rm -rf public
 npm run addHaldi
 
 echo "==> DB migration"
