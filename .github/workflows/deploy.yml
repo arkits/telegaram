@@ -1,0 +1,21 @@
+name: Deploy Telegaram
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy chaddi-tg
+        uses: JimCronqvist/action-ssh@0.1.1
+        with:
+          hosts: ${{ secrets.SSH_TARGET }}
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
+          debug: false
+          command: |
+            /home/arkits/software/telegaram/scripts/deploy-hostscript.sh

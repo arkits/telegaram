@@ -107,3 +107,4 @@ db/td.binlog
 .DS_Store
 mirchi/docs
 mirchi/db/td.binlog
+mirchi/public
