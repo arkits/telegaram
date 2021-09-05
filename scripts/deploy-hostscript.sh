@@ -24,4 +24,5 @@ echo "==> DB migration"
 npx prisma migrate deploy
 
 echo "==> Start the server"
-npm start
+# pm2 start src/index.js --name mirchi
+pm2 restart mirchi
