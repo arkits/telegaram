@@ -7,11 +7,7 @@ const SioClient = observer(() => {
   const store = useContext(StoreContext);
 
   useEffect(() => {
-    const newSocket = io(
-      `${window.location.protocol}//${window.location.hostname}${
-        window.location.hostname === 'localhost' ? ':4206' : ''
-      }`
-    );
+    const newSocket = io(`${window.location.origin}`);
 
     newSocket.on('connect', (data) => {
       // console.log('[sio] Connected SIO');

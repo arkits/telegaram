@@ -18,6 +18,7 @@ cd mirchi
 npm install
 
 echo "==> Add haldi to mirchi - copy frontend to server"
+rm -rf public
 npm run addHaldi
 
 echo "==> DB migration"
