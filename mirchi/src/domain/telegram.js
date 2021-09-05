@@ -66,7 +66,8 @@ async function initTelegram() {
   garamCache.airgram.on('updateNewChat', async (ctx, next) => {
     logger.debug('[update] updateNewChat update=%s', JSON.stringify(ctx.update));
     try {
-      await handleUpdateNewChat(ctx.update);
+      const chat = await handleUpdateNewChat(ctx.update);
+      getIo().emit('chatUpdate', serializeJson(chat));
     } catch (error) {
       logger.error(
         'Caught Error in updateNewChat middleware - error=%s update=%s',
@@ -97,7 +98,8 @@ async function initTelegram() {
   garamCache.airgram.on('updateUser', async (ctx, next) => {
     logger.debug('[update] updateUser update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
-      await handleUpdateUser(ctx.update);
+      const user = await handleUpdateUser(ctx.update);
+      getIo().emit('userUpdate', serializeJson(user));
     } catch (error) {
       logger.error(
         'Caught Error in updateUser middleware - error=%s update=%s',

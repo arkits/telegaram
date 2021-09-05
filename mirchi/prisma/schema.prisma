@@ -30,6 +30,8 @@ model Chat {
   timeLastActive DateTime? @db.Timestamp(6)
   minithumbnail  String?
   description    String?
+  pinned         Boolean?
+  categories     String[]
 }
 
 model User {

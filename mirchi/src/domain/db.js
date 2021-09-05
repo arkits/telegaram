@@ -41,7 +41,7 @@ async function getAllActiveUsers() {
 }
 
 async function handleUpdateNewChat(update) {
-  await prisma.chat.upsert({
+  const chat = await prisma.chat.upsert({
     where: {
       id: BigInt(update?.chat?.id)
     },
@@ -57,11 +57,11 @@ async function handleUpdateNewChat(update) {
       timeLastActive: new Date()
     }
   });
-  return;
+  return chat;
 }
 
 async function handleUpdateUser(update) {
-  await prisma.user.upsert({
+  const user = await prisma.user.upsert({
     where: {
       id: BigInt(update?.user?.id)
     },
@@ -81,7 +81,7 @@ async function handleUpdateUser(update) {
       type: update?.user?.type?._
     }
   });
-  return;
+  return user;
 }
 
 async function handleUpdateNewMessage(update) {
