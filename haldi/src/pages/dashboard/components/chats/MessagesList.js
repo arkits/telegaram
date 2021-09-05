@@ -10,7 +10,9 @@ const AuthorSignature = observer(({ authorId }) => {
   let author = store.users[authorId];
 
   return (
-    <Typography variant="h5">{author?.username || author?.firstName || author?.id}</Typography>
+    <Typography style={{ paddingLeft: '15px', paddingTop: '10px' }} variant="h6">
+      {author?.username || author?.firstName || author?.id}
+    </Typography>
   );
 });
 
@@ -27,21 +29,19 @@ function MessagesList({ selectedChat }) {
       els.push(
         <Fragment key={idx}>
           <Card elevation={5} style={{ backgroundColor: '#263238', marginBottom: '5px' }}>
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item xs={2}>
-                  <AuthorSignature authorId={message?.authorId} />
-                  <Typography variant="body2">
-                    {format(new Date(message?.createdAt), 'MM/dd/yyyy HH:mm:ss aaa')}
-                  </Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  <Typography variant="body1">
-                    {message?.content?.text?.text || message?.content?._}
-                  </Typography>
-                </Grid>
+            <Grid container spacing={3}>
+              <Grid item xs={2} style={{ backgroundColor: '#37474f' }}>
+                <AuthorSignature authorId={message?.authorId} />
+                <Typography variant="body2" style={{ paddingLeft: '15px', paddingBottom: '15px' }}>
+                  {format(new Date(message?.createdAt), 'MM/dd/yyyy HH:mm:ss aaa')}
+                </Typography>
               </Grid>
-            </CardContent>
+              <Grid item xs={10}>
+                <pre style={{ fontFamily: 'Barlow', fontSize: '1.2em' }}>
+                  {message?.content?.text?.text || message?.content?._}
+                </pre>
+              </Grid>
+            </Grid>
           </Card>
         </Fragment>
       );

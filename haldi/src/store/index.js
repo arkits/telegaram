@@ -31,7 +31,7 @@ class Store {
         lastMessageAuthor?.username || lastMessageAuthor?.firstName || lastMessageAuthor?.id;
     }
 
-    return `${prettyLastMessageAuthor}: ${lastMessageText?.substring(0, 20)}`;
+    return `${prettyLastMessageAuthor}: ${lastMessageText?.substring(0, 50)}`;
   }
 
   addChat(chat) {

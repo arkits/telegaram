@@ -8,12 +8,13 @@ function App() {
     palette: {
       type: 'dark',
       background: {
-        default: '#121212',
+        default: '#111111',
         paper: '#1E1E1E'
       }
     },
     typography: {
-      fontFamily: ['Barlow'].join(',')
+      fontFamily: ['Barlow'].join(','),
+      fontWeightRegular: '400'
     }
   });
 

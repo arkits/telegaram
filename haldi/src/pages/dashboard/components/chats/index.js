@@ -2,14 +2,16 @@ import {
   Grid,
   AppBar,
   Tabs,
-  TabsPanel,
+  TextField,
   Box,
   Typography,
   Tab,
   Card,
-  CardContent
+  CardContent,
+  Fab
 } from '@material-ui/core';
-import { useContext, useState } from 'react';
+import AddIcon from '@material-ui/icons/Add';
+import { useContext } from 'react';
 import React from 'react';
 import GroupList from './GroupList';
 import MessagesList from './MessagesList';
@@ -65,16 +67,16 @@ const Chats = observer(() => {
               overflow: 'scroll'
             }}
           >
-            <CardContent>
+            <CardContent style={{ backgroundColor: '#3F50B5' }}>
               <Typography
                 variant="h4"
-                style={{ fontFamily: 'Barlow', fontWeight: '700', paddingBottom: '20px' }}
+                style={{ fontFamily: 'Barlow', fontWeight: '700', paddingBottom: '0px' }}
               >
                 {selectedChat?.title}
               </Typography>
             </CardContent>
 
-            <AppBar position="static" style={{ margin: '0px' }}>
+            <AppBar elevation={0} position="static" style={{ margin: '0px' }}>
               <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
                 <Tab label="Messages" {...a11yProps(0)} />
                 <Tab label="Details" {...a11yProps(1)} />
@@ -87,10 +89,25 @@ const Chats = observer(() => {
             <TabPanel value={value} index={1}>
               <pre>{JSON.stringify(selectedChat, null, 4)}</pre>
             </TabPanel>
+            <Card
+              elevation={0}
+              style={{
+                backgroundColor: '#111111',
+                width: '80%',
+                margin: 'auto'
+              }}
+            >
+              <CardContent style={{ display: 'flex' }}>
+                <TextField
+                  id="outlined-basic"
+                  label="Namaskar Mandali"
+                  variant="outlined"
+                  style={{ flexGrow: '1', marginRight: '15px' }}
+                />
 
-            <Card style={{ backgroundColor: '#b22a00', height: '100%' }}>
-              <CardContent>
-                Actions
+                <Fab color="primary" aria-label="add">
+                  <AddIcon />
+                </Fab>
                 <br />
               </CardContent>
             </Card>
