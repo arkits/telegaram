@@ -22,6 +22,11 @@ const SioClient = observer(() => {
     newSocket.on('chatUpdate', (chat) => {
       //  console.log('[sio] chatUpdate', data);
       store.addChat(chat);
+
+      // temp: auto select a Chat rather than having not selectedChat on launch
+      if (store.selectedChatIdx === null && chat?.messages && chat?.messages.length > 0) {
+        store.setSelectedChatIdx(chat.id);
+      }
     });
 
     newSocket.on('chatMessage', (data) => {

@@ -3,6 +3,7 @@ import { Fragment, useContext } from 'react';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import { StoreContext } from '../../../../store';
+import './style.css';
 
 const AuthorSignature = observer(({ authorId }) => {
   const store = useContext(StoreContext);
@@ -28,21 +29,32 @@ function MessagesList({ selectedChat }) {
     messages.forEach((message, idx) => {
       els.push(
         <Fragment key={idx}>
-          <Card elevation={5} style={{ backgroundColor: '#263238', marginBottom: '5px' }}>
-            <Grid container spacing={3}>
-              <Grid item xs={2} style={{ backgroundColor: '#37474f' }}>
-                <AuthorSignature authorId={message?.authorId} />
-                <Typography variant="body2" style={{ paddingLeft: '15px', paddingBottom: '15px' }}>
-                  {format(new Date(message?.createdAt), 'MM/dd/yyyy HH:mm:ss aaa')}
-                </Typography>
-              </Grid>
-              <Grid item xs={10}>
-                <pre style={{ fontFamily: 'Barlow', fontSize: '1.2em' }}>
+          <Grid container spacing={3}>
+            <Grid item xs={2}>
+              <AuthorSignature authorId={message?.authorId} />
+            </Grid>
+            <Grid item xs={10}>
+              <div className="talk-bubble tri-right left-top">
+                <pre
+                  style={{ fontFamily: 'Barlow', fontSize: '1.2em', padding: '0px 20px 0px 20px' }}
+                >
                   {message?.content?.text?.text || message?.content?._}
                 </pre>
-              </Grid>
+                <Typography
+                  variant="overline"
+                  style={{
+                    paddingLeft: '20px',
+                    paddingRight: '20px',
+                    paddingBottom: '5px',
+                    fontStyle: 'italic',
+                    color: '#78909c'
+                  }}
+                >
+                  {format(new Date(message?.createdAt), 'MM/dd/yyyy hh:mm:ss aaa')}
+                </Typography>
+              </div>
             </Grid>
-          </Card>
+          </Grid>
         </Fragment>
       );
     });
