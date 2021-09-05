@@ -1,22 +1,11 @@
-import {
-  Grid,
-  AppBar,
-  Tabs,
-  TextField,
-  Box,
-  Typography,
-  Tab,
-  Card,
-  CardContent,
-  Fab
-} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Grid, AppBar, Tabs, Box, Typography, Tab, Card, CardContent } from '@material-ui/core';
 import { useContext } from 'react';
 import React from 'react';
 import GroupList from './GroupList';
 import MessagesList from './MessagesList';
 import { observer } from 'mobx-react-lite';
 import { StoreContext } from '../../../../store';
+import Composer from './Composer';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -89,28 +78,7 @@ const Chats = observer(() => {
             <TabPanel value={value} index={1}>
               <pre>{JSON.stringify(selectedChat, null, 4)}</pre>
             </TabPanel>
-            <Card
-              elevation={0}
-              style={{
-                backgroundColor: '#111111',
-                width: '80%',
-                margin: 'auto'
-              }}
-            >
-              <CardContent style={{ display: 'flex' }}>
-                <TextField
-                  id="outlined-basic"
-                  label="Namaskar Mandali"
-                  variant="outlined"
-                  style={{ flexGrow: '1', marginRight: '15px' }}
-                />
-
-                <Fab color="primary" aria-label="add">
-                  <AddIcon />
-                </Fab>
-                <br />
-              </CardContent>
-            </Card>
+            <Composer />
           </Card>
         </Grid>
       </Grid>

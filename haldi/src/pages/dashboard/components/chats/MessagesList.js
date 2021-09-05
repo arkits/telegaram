@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Divider, Grid } from '@material-ui/core';
+import { Card, Typography, Grid } from '@material-ui/core';
 import { Fragment, useContext } from 'react';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
@@ -11,7 +11,7 @@ const AuthorSignature = observer(({ authorId }) => {
 
   return (
     <Typography style={{ paddingLeft: '15px', paddingTop: '10px' }} variant="h6">
-      {author?.username || author?.firstName || author?.id}
+      {author?.username || author?.firstName || author?.id || 'Unknown User'}
     </Typography>
   );
 });

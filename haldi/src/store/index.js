@@ -7,6 +7,7 @@ class Store {
   sioConnected = false;
   users = {};
   tdlibConnectionState = '';
+  socket = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -66,6 +67,10 @@ class Store {
 
   setTdlibConnectionState(connectionState) {
     this.tdlibConnectionState = connectionState;
+  }
+
+  setSocket(socket) {
+    this.socket = socket;
   }
 }
 

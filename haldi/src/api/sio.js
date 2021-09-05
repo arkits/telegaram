@@ -1,10 +1,9 @@
-import { useState, useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import io from 'socket.io-client';
 import { observer } from 'mobx-react-lite';
 import { StoreContext } from '../store';
 
 const SioClient = observer(() => {
-  const [socket, setSocket] = useState(null);
   const store = useContext(StoreContext);
 
   useEffect(() => {
@@ -40,10 +39,10 @@ const SioClient = observer(() => {
       store.setTdlibConnectionState(connectionState);
     });
 
-    setSocket(newSocket);
+    store.setSocket(newSocket);
 
     return () => newSocket.close();
-  }, [setSocket]);
+  }, [store]);
 
   return null;
 });

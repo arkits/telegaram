@@ -44,6 +44,10 @@ function createSio(server) {
       logger.info('[sio] req_getMessages');
       io.emit('res_getMessages', msg);
     });
+
+    socket.on('req_sendMessage', (msg) => {
+      logger.info('[sio] req_sendMessage', msg);
+    });
   });
 }
 
