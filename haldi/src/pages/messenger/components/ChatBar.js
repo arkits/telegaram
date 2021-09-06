@@ -1,13 +1,9 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import makeStyles from '@material-ui/styles/makeStyles';
 import InputBase from '@material-ui/core/InputBase';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import AddCircle from '@material-ui/icons/AddCircle';
-import Gif from '@material-ui/icons/Gif';
-import Image from '@material-ui/icons/Image';
-import Note from '@material-ui/icons/Note';
-import ThumbUp from '@material-ui/icons/ThumbUp';
-import TagFaces from '@material-ui/icons/TagFaces';
+import { observer } from 'mobx-react-lite';
+import { StoreContext } from '../../../store';
+import { Image, AddCircle, ThumbUp } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -30,22 +26,41 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const ChatBar = ({ concise }) => {
+const ChatBar = observer(({ concise }) => {
+  const store = useContext(StoreContext);
+  const [textFieldValue, setTextFieldValue] = useState('');
+
+  const emitSendMessage = () => {
+    store.socket.emit('req_sendMessage', {
+      text: textFieldValue,
+      chatId: store.selectedChatIdx
+    });
+    setTextFieldValue('');
+  };
+
   const styles = useStyles();
   return (
     <>
       <AddCircle className={styles.icon} />
       {!concise && (
         <>
-          <Gif className={styles.icon} />
-          <Note className={styles.icon} />
           <Image className={styles.icon} />
         </>
       )}
-      <InputBase className={styles.input} placeholder={'Namaskar Mandali...'} />
+      <InputBase
+        className={styles.input}
+        placeholder={'Namaskar Mandali...'}
+        value={textFieldValue}
+        onChange={(e) => setTextFieldValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            emitSendMessage();
+          }
+        }}
+      />
       <ThumbUp className={styles.icon} />
     </>
   );
-};
+});
 
 export default ChatBar;
