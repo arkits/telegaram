@@ -75,9 +75,9 @@ const useStyles = makeStyles(({ palette, spacing }) => {
     iconBtn: {
       opacity: 0,
       padding: 6,
-      color: 'rgba(0,0,0,0.34)',
+      color: '#33b5e5',
       '&:hover': {
-        color: 'rgba(0,0,0,0.87)'
+        color: '#33b5e5'
       },
       margin: '0 4px',
       '& svg': {

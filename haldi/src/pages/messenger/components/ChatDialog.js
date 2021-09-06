@@ -23,6 +23,21 @@ const ChatDialog = observer(() => {
 
   const chat = store?.chats[store?.selectedChatIdx];
 
+  const createNewTransformedMessage = (message) => {
+    let side = 'left';
+    if (parseInt(message?.authorId) === parseInt(store?.me?.id)) {
+      side = 'right';
+    }
+
+    return {
+      startDate: message?.createdAt,
+      authorId: message?.authorId,
+      side: side,
+      authorName: getPrettyUserName(store?.users[message?.authorId]),
+      messages: [message?.content?.text?.text || message?.content?._]
+    };
+  };
+
   const GenerateChatMsgs = () => {
     // fast fail if no messages in Chat
     let messages = chat?.messages;
@@ -39,12 +54,7 @@ const ChatDialog = observer(() => {
       let currentMessage = messages[i];
 
       if (transformedMessages.length === 0) {
-        transformedMessages.push({
-          startDate: currentMessage?.createdAt,
-          authorId: currentMessage?.authorId,
-          authorName: getPrettyUserName(store?.users[currentMessage?.authorId]),
-          messages: [currentMessage?.content?.text?.text || currentMessage?.content?._]
-        });
+        transformedMessages.push(createNewTransformedMessage(currentMessage));
       } else {
         let lastTransformedMessage = transformedMessages[transformedMessages.length - 1];
 
@@ -53,12 +63,7 @@ const ChatDialog = observer(() => {
             .concat([currentMessage?.content?.text?.text || currentMessage?.content?._])
             .concat(lastTransformedMessage.messages);
         } else {
-          transformedMessages.push({
-            startDate: currentMessage?.createdAt,
-            authorId: currentMessage?.authorId,
-            authorName: getPrettyUserName(store?.users[currentMessage?.authorId]),
-            messages: [currentMessage?.content?.text?.text || currentMessage?.content?._]
-          });
+          transformedMessages.push(createNewTransformedMessage(currentMessage));
         }
       }
 
@@ -76,6 +81,7 @@ const ChatDialog = observer(() => {
             messages={transformedMessage?.messages}
             avatarAlt={transformedMessage?.authorName}
             avatarSrc={'/'}
+            side={transformedMessage?.side}
           />
         </Fragment>
       );

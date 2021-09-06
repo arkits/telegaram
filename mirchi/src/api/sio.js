@@ -4,6 +4,7 @@ const { getChats, getMessagesByChat, getAllActiveUsers } = require('../domain/db
 const { serializeJson } = require('../domain/utils');
 const logger = require('../domain/logger');
 const { garamCache } = require('../domain/cache');
+const { toObject } = require('@airgram/core');
 
 let io = null;
 
@@ -37,6 +38,10 @@ function createSio(server) {
     // Publish TDLib Connection State
     io.emit('tdlibConnectionState', garamCache.tdlibConnectionState);
 
+    let me = await garamCache.airgram.api.getMe();
+    me = toObject(me);
+    io.emit('meUpdate', me);
+
     // New connection action - END
 
     // SIO Events
@@ -46,7 +51,7 @@ function createSio(server) {
     });
 
     socket.on('req_sendMessage', (req) => {
-      logger.info('[sio] req_sendMessage', req);
+      logger.info('[sio] req_sendMessage', JSON.stringify(req));
       garamCache.airgram.api
         .sendMessage({
           chatId: parseInt(req?.chatId),
@@ -58,8 +63,8 @@ function createSio(server) {
             }
           }
         })
-        .then((payload) => {
-          logger.info('[sio] response sendMessage', payload);
+        .then((res) => {
+          logger.info('[sio] response sendMessage', JSON.stringify(res));
         })
         .catch((err) => {
           logger.error('[sio] response sendMessage', err);

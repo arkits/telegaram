@@ -44,6 +44,11 @@ const SioClient = observer(() => {
       store.setTdlibConnectionState(connectionState);
     });
 
+    newSocket.on('meUpdate', (me) => {
+      console.log('[sio] meUpdate', me);
+      store.setMe(me);
+    });
+
     store.setSocket(newSocket);
 
     return () => newSocket.close();
