@@ -6,6 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import StarIcon from '@material-ui/icons/Star';
 import Phone from '@material-ui/icons/Phone';
 import Videocam from '@material-ui/icons/Videocam';
 import Info from '@material-ui/icons/Info';
@@ -48,7 +49,9 @@ const ConversationHead = observer(() => {
         <Avatar
           alt={chat?.title}
           src={chat?.minithumbnail ? `data:image/jpg;base64,${chat?.minithumbnail}` : '/'}
-        />
+        >
+          {chat?.title?.slice(0, 3)}
+        </Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={chat?.title}
@@ -57,10 +60,7 @@ const ConversationHead = observer(() => {
       />
       <ListItemSecondaryAction>
         <IconButton className={styles.iconBtn}>
-          <Phone />
-        </IconButton>
-        <IconButton className={styles.iconBtn}>
-          <Videocam />
+          <StarIcon />
         </IconButton>
         <IconButton className={styles.iconBtn}>
           <Info />

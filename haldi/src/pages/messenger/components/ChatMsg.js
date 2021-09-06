@@ -91,7 +91,7 @@ const useStyles = makeStyles(({ palette, spacing }) => {
   };
 });
 
-const ChatMsg = ({ avatar, messages, side }) => {
+const ChatMsg = ({ avatarSrc, avatarAlt, messages, side }) => {
   const styles = useStyles();
   const attachClass = (index) => {
     if (index === 0) {
@@ -106,7 +106,10 @@ const ChatMsg = ({ avatar, messages, side }) => {
     <Grid container spacing={2}>
       {side === 'left' && (
         <Grid item>
-          <Avatar src={avatar} className={cx(styles.avatar)} />
+          <Avatar src={avatarSrc} alt={avatarAlt} className={cx(styles.avatar)}>
+            {' '}
+            {avatarAlt?.slice(0, 3)}
+          </Avatar>
         </Grid>
       )}
       <Grid item xs>
