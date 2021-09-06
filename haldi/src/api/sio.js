@@ -45,7 +45,7 @@ const SioClient = observer(() => {
     });
 
     newSocket.on('meUpdate', (me) => {
-      console.log('[sio] meUpdate', me);
+      //  console.log('[sio] meUpdate', me);
       store.setMe(me);
     });
 

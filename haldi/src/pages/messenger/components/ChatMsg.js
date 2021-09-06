@@ -116,7 +116,7 @@ const ChatMsg = ({ avatarSrc, avatarAlt, messages, side }) => {
         {messages.map((msg, i) => {
           return (
             // eslint-disable-next-line react/no-array-index-key
-            <div key={msg.id || i} className={cx(styles.row, styles[`${side}Row`])}>
+            <div key={i} className={cx(styles.row, styles[`${side}Row`])}>
               <div className={cx(styles.msgBox, styles[`${side}MsgBox`])}>
                 {typeof msg === 'string' && (
                   <Typography

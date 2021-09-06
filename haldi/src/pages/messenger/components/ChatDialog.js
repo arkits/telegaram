@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment, useContext, useRef, useEffect } from 'react';
 import makeStyles from '@material-ui/styles/makeStyles';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -94,7 +94,18 @@ const ChatDialog = observer(() => {
       .reverse();
   };
 
-  return <Box p={'16px 30px 12px 10px'}>{GenerateChatMsgs()}</Box>;
+  const AlwaysScrollToBottom = () => {
+    const elementRef = useRef();
+    useEffect(() => elementRef.current.scrollIntoView());
+    return <div ref={elementRef} />;
+  };
+
+  return (
+    <Box p={'16px 30px 12px 10px'}>
+      {GenerateChatMsgs()}
+      <AlwaysScrollToBottom />
+    </Box>
+  );
 });
 
 export default ChatDialog;
