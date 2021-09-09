@@ -1,3 +1,5 @@
+const logger = require('./logger');
+
 function serializeJson(data) {
   return JSON.parse(
     JSON.stringify(
@@ -7,6 +9,17 @@ function serializeJson(data) {
   );
 }
 
+function trimLocalPathPrefix(path) {
+  let toReturn = path;
+
+  if (process.env.TDLIB_DB_PATH) {
+    toReturn = path.split(process.env.TDLIB_DB_PATH)[1];
+  }
+
+  return toReturn;
+}
+
 module.exports = {
-  serializeJson
+  serializeJson,
+  trimLocalPathPrefix
 };

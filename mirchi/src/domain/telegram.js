@@ -60,13 +60,17 @@ async function initTelegram() {
     logger.info('updateConnectionState=%s', tdlibConnectionState);
 
     garamCache.tdlibConnectionState = tdlibConnectionState;
+
+    logger.trace('[sio-emmit] %s', JSON.stringify(serializeJson(tdlibConnectionState)));
     getIo().emit('tdlibConnectionState', tdlibConnectionState);
   });
 
   garamCache.airgram.on('updateNewChat', async (ctx, next) => {
-    logger.debug('[update] updateNewChat update=%s', JSON.stringify(ctx.update));
+    logger.trace('[update] updateNewChat update=%s', JSON.stringify(ctx.update));
     try {
       const chat = await handleUpdateNewChat(ctx.update);
+
+      logger.trace('[sio-emmit] %s', JSON.stringify(serializeJson(chat)));
       getIo().emit('chatUpdate', serializeJson(chat));
     } catch (error) {
       logger.error(
@@ -80,9 +84,11 @@ async function initTelegram() {
   });
 
   garamCache.airgram.on('updateNewMessage', async (ctx, next) => {
-    logger.debug('[update] updateNewMessage update=%s', JSON.stringify(serializeJson(ctx.update)));
+    logger.trace('[update] updateNewMessage update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       const message = await handleUpdateNewMessage(ctx.update);
+
+      logger.trace('[sio-emmit] %s', JSON.stringify(serializeJson(message)));
       getIo().emit('chatMessage', serializeJson(message));
     } catch (error) {
       logger.error(
@@ -96,9 +102,11 @@ async function initTelegram() {
   });
 
   garamCache.airgram.on('updateUser', async (ctx, next) => {
-    logger.debug('[update] updateUser update=%s', JSON.stringify(serializeJson(ctx.update)));
+    logger.trace('[update] updateUser update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       const user = await handleUpdateUser(ctx.update);
+
+      logger.trace('[sio-emmit] %s', JSON.stringify(serializeJson(user)));
       getIo().emit('userUpdate', serializeJson(user));
     } catch (error) {
       logger.error(
@@ -113,7 +121,7 @@ async function initTelegram() {
 
   // {"_":"updateUserStatus","userId":XXX,"status":{"_":"userStatusOnline","expires":1630794480}}
   garamCache.airgram.on('updateUserStatus', async (ctx, next) => {
-    logger.debug('[update] updateUserStatus update=%s', JSON.stringify(serializeJson(ctx.update)));
+    logger.trace('[update] updateUserStatus update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       await handleUpdateUserStatus(ctx.update);
     } catch (error) {
@@ -128,7 +136,7 @@ async function initTelegram() {
   });
 
   garamCache.airgram.on('updateSupergroup', async (ctx, next) => {
-    logger.debug('[update] updateSupergroup update=%s', JSON.stringify(serializeJson(ctx.update)));
+    logger.trace('[update] updateSupergroup update=%s', JSON.stringify(serializeJson(ctx.update)));
     try {
       await handleUpdateSupergroup(ctx.update);
     } catch (error) {
@@ -143,7 +151,7 @@ async function initTelegram() {
   });
 
   garamCache.airgram.on('updateSupergroupFullInfo', async (ctx, next) => {
-    logger.debug(
+    logger.trace(
       '[update] updateSupergroupFullInfo update=%s',
       JSON.stringify(serializeJson(ctx.update))
     );

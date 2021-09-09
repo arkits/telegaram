@@ -1,3 +1,5 @@
+const { API_BASE_URL } = require('../api/fetches');
+
 function getPrettyUserName(user) {
   if (user?.username) {
     return `@${user?.username}`;
@@ -10,6 +12,17 @@ function getPrettyUserName(user) {
   }
 }
 
+function getChatAvatarSrc(chat) {
+  if (chat?.profile_photo_path) {
+    return `${API_BASE_URL}${chat?.profile_photo_path}`;
+  } else if (chat?.minithumbnail) {
+    return `data:image/jpg;base64,${chat?.minithumbnail}`;
+  } else {
+    return '/';
+  }
+}
+
 module.exports = {
-  getPrettyUserName
+  getPrettyUserName,
+  getChatAvatarSrc
 };

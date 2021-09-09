@@ -26,7 +26,10 @@ app.use(cors());
 
 app.use('/api', apiRouter);
 
-app.use(express.static('public'));
+app.use('/profile_photos', express.static('db/profile_photos'));
+
+app.use('/', express.static('public'));
+
 app.get('*', (req, res) => res.sendFile(path.join(__dirname + '/../public/index.html')));
 
 server.listen(SERVER_PORT, () => {

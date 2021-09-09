@@ -73,10 +73,7 @@ const ChatDialog = observer(() => {
     transformedMessages.forEach((transformedMessage, idx) => {
       generatedChatMsgs.push(
         <Fragment key={idx}>
-          <Typography className={styles.date}>
-            {' '}
-            {format(new Date(transformedMessage?.startDate), 'MM/dd/yyyy hh:mm:ss aaa')}
-          </Typography>
+          <Typography className={styles.date}> {transformedMessage?.startDate}</Typography>
           <ChatMsg
             messages={transformedMessage?.messages}
             avatarAlt={transformedMessage?.authorName}

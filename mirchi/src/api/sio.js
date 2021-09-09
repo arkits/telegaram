@@ -5,6 +5,8 @@ const { serializeJson } = require('../domain/utils');
 const logger = require('../domain/logger');
 const { garamCache } = require('../domain/cache');
 const { toObject } = require('@airgram/core');
+const { response } = require('express');
+const { trimLocalPathPrefix } = require('../domain/utils');
 
 let io = null;
 
@@ -45,9 +47,76 @@ function createSio(server) {
     // New connection action - END
 
     // SIO Events
-    socket.on('req_getMessages', (msg) => {
-      logger.info('[sio] req_getMessages');
-      io.emit('res_getMessages', msg);
+    socket.on('req_chatRefresh', (payload) => {
+      logger.info('[sio] req_chatRefresh', payload);
+
+      // getChat
+      garamCache.airgram.api
+        .getChat({
+          chatId: parseInt(payload?.chatId)
+        })
+        .then((res) => {
+          logger.debug('getChat res=%s', JSON.stringify(res));
+
+          // Display Chat Photo
+          if (res?.response?.photo?.small?.local?.path) {
+            // Photo has already been downloaded locally
+            io.emit('event_chatPhotoUpdate', {
+              chatId: payload?.chatId,
+              profilePhotoPath: trimLocalPathPrefix(res?.response?.photo?.small?.local?.path)
+            });
+          } else {
+            // Download Photo remotely and emit SIO
+
+            let photoFileId = res?.response?.photo?.small?.id;
+            if (photoFileId === null) {
+              logger.error('photoFileId - photoId not found res=%s', JSON.stringify(res));
+              return;
+            }
+
+            garamCache.airgram.api
+              .downloadFile({
+                fileId: photoFileId,
+                priority: 1,
+                synchronous: true
+              })
+              .then((res) => {
+                logger.debug('downloadFile - res=%s', JSON.stringify(res));
+
+                if (res?.response?._ === 'error') {
+                  logger.error('downloadFile - returned error! res=%s', JSON.stringify(res));
+                  return;
+                }
+
+                if (!res?.response?.local?.path) {
+                  logger.error(
+                    'downloadFile - res did not have local.path! res=%s',
+                    JSON.stringify(res)
+                  );
+                  return;
+                }
+
+                io.emit('event_chatPhotoUpdate', {
+                  chatId: payload?.chatId,
+                  profilePhotoPath: trimLocalPathPrefix(res?.response?.local?.path)
+                });
+              });
+          }
+        });
+
+      /*
+      garamCache.airgram.api
+        .getChatHistory({
+          chatId: parseInt(payload?.chatId),
+          fromMessageId: 0,
+          limit: 100
+        })
+        .then((res) => {
+          logger.info('getChatHistory response=%s', JSON.stringify(res));
+        });
+        */
+
+      io.emit('req_chatRefresh', payload);
     });
 
     socket.on('req_sendMessage', (req) => {

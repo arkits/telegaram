@@ -9,6 +9,7 @@ import MoreHoriz from '@material-ui/icons/MoreHoriz';
 import { grey } from '@material-ui/core/colors';
 import { observer } from 'mobx-react-lite';
 import { StoreContext } from '../../../store';
+import { getChatAvatarSrc } from '../../../utils';
 
 const useStyles = makeStyles(({ palette }) => ({
   root: ({ active }) => ({
@@ -68,46 +69,48 @@ const useStyles = makeStyles(({ palette }) => ({
   }
 }));
 
-const ChatListItem = observer(
-  ({ bold, active, avatar, minithumbnail, id, title, subtitle, responded, concise }) => {
-    const store = useContext(StoreContext);
-    const styles = useStyles({ bold, active });
+const ChatListItem = observer(({ chat, concise }) => {
+  const store = useContext(StoreContext);
+  const styles = useStyles({
+    bold: chat?.bold
+  });
 
-    return (
-      <Box px={1}>
-        <ListItem
-          className={cx(styles.root, styles.rootHover)}
-          onClick={() => {
-            store.setSelectedChatIdx(id);
-          }}
-        >
-          <Avatar
-            alt={title}
-            src={minithumbnail ? `data:image/jpg;base64,${minithumbnail}` : '/'}
-            className={styles.avatar}
-          />
-          {!concise && (
-            <>
-              <ListItemText
-                primary={title}
-                secondary={subtitle}
-                primaryTypographyProps={{ noWrap: true }}
-                secondaryTypographyProps={{ noWrap: true }}
-                classes={{ primary: styles.primary, secondary: styles.secondary }}
-              />
-              <Box position={'relative'}>
-                <MoreHoriz className={styles.more} />
-                {bold && <div className={cx(styles.float, styles.dot)} />}
-                {responded && (
-                  <Avatar alt={avatar} className={cx(styles.float, styles.responded)} />
-                )}
-              </Box>
-            </>
-          )}
-        </ListItem>
-      </Box>
-    );
-  }
-);
+  return (
+    <Box px={1}>
+      <ListItem
+        className={cx(styles.root, styles.rootHover)}
+        onClick={() => {
+          store.setSelectedChatIdx(chat?.id);
+          store.socket.emit('req_chatRefresh', {
+            chatId: chat?.id
+          });
+        }}
+      >
+        <Avatar alt={chat.title} src={getChatAvatarSrc(chat)} className={styles.avatar} />
+        {!concise && (
+          <>
+            <ListItemText
+              primary={chat?.title}
+              secondary={chat?.subtitle}
+              primaryTypographyProps={{ noWrap: true }}
+              secondaryTypographyProps={{ noWrap: true }}
+              classes={{ primary: styles.primary, secondary: styles.secondary }}
+            />
+            <Box position={'relative'}>
+              <MoreHoriz className={styles.more} />
+              {chat?.bold && <div className={cx(styles.float, styles.dot)} />}
+              {chat?.responded && (
+                <Avatar
+                  className={cx(styles.float, styles.responded)}
+                  src={getChatAvatarSrc(chat)}
+                />
+              )}
+            </Box>
+          </>
+        )}
+      </ListItem>
+    </Box>
+  );
+});
 
 export default ChatListItem;

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import cx from 'clsx';
 import makeStyles from '@material-ui/styles/makeStyles';
 import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
@@ -7,12 +6,9 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import Search from '@material-ui/icons/Search';
-import Edit from '@material-ui/icons/Edit';
-import ThumbUp from '@material-ui/icons/ThumbUp';
-import FormatPaint from '@material-ui/icons/FormatPaint';
 import { observer } from 'mobx-react-lite';
 import { StoreContext } from '../../../store';
+import { getChatAvatarSrc } from '../../../utils';
 
 const useStyles = makeStyles(() => ({
   avatar: {
@@ -98,7 +94,8 @@ const ChatSettings = observer(() => {
         <Avatar
           className={styles.avatar}
           alt={chat?.title}
-          src={chat?.minithumbnail ? `data:image/jpg;base64,${chat?.minithumbnail}` : '/'}
+          src={getChatAvatarSrc(chat)}
+          src={getChatAvatarSrc(chat)}
         />
         <Typography className={styles.name} variant={'h1'} align={'center'}>
           {chat?.title}

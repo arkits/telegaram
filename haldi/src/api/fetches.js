@@ -3,7 +3,7 @@ let DEFAULT_REQUEST_OPTIONS = {
   redirect: 'follow'
 };
 
-let API_BASE_URL = 'http://localhost:3001';
+let API_BASE_URL = 'http://localhost:4206';
 
 function getChats() {
   return fetch(`${API_BASE_URL}/api/chats`, DEFAULT_REQUEST_OPTIONS);
@@ -15,5 +15,6 @@ function getMessages(chatId) {
 
 module.exports = {
   getChats,
-  getMessages
+  getMessages,
+  API_BASE_URL
 };

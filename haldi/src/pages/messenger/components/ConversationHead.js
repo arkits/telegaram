@@ -7,11 +7,10 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
-import Phone from '@material-ui/icons/Phone';
-import Videocam from '@material-ui/icons/Videocam';
 import Info from '@material-ui/icons/Info';
 import { StoreContext } from '../../../store';
 import { observer } from 'mobx-react-lite';
+import { getChatAvatarSrc } from '../../../utils';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -46,10 +45,7 @@ const ConversationHead = observer(() => {
       className={styles.root}
     >
       <ListItemAvatar>
-        <Avatar
-          alt={chat?.title}
-          src={chat?.minithumbnail ? `data:image/jpg;base64,${chat?.minithumbnail}` : '/'}
-        >
+        <Avatar alt={chat?.title} src={getChatAvatarSrc(chat)}>
           {chat?.title?.slice(0, 3)}
         </Avatar>
       </ListItemAvatar>
